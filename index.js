@@ -1,9 +1,8 @@
-const addLabelsBasedOnTitleAndBody = require('./automation/addLabelsBasedOnTitleAndbody.automation');
+const addLabelsBasedOnTitleAndBody = require('./automation/addLabelsBasedOnTitleAndBody.automation');
+const closeCommand = require('./commands/close.command');
 const labelCommand = require('./commands/label.command');
-const { createComment } = require('./helpers/comment.helper');
+const { createComment, deleteComment } = require('./helpers/comment.helper');
 const getCommandAndArgs = require('./helpers/getCommandAndArgs.helper');
-const { addLabel } = require('./helpers/label.helper');
-const { listRepoLabels } = require('./helpers/listLabels.helper');
 
 /**
  * This is the main entrypoint to your Probot app
@@ -23,6 +22,9 @@ module.exports = app => {
 			case '/label':
 				labelCommand(context, args);
 				break;
+			case '/close':
+				closeCommand(context);
+				break;
 
 			default:
 				if (command[0] === '/') {
@@ -31,9 +33,14 @@ module.exports = app => {
 							context,
 							`**${command}** command doesn't exist.
 						     Available commands are:- 
-						    - **/label** - Add labels to an issue.
+						    - **/label** - Add labels to an issue or pull request.
+							- **/close** - Close an issue or pull request.
 						    `
 						);
+					}
+
+					if (commentingUser === 'shriproperty[bot]') {
+						deleteComment(context);
 					}
 				}
 				break;
