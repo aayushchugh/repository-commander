@@ -29,6 +29,9 @@ module.exports = app => {
 			case '/approve':
 				approveCommand(context);
 				break;
+			case '/merge':
+				mergeCommand(context);
+				break;
 
 			default:
 				if (command[0] === '/') {
