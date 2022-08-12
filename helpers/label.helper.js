@@ -11,9 +11,9 @@ exports.addLabel = async (names, context, color) => {
 	const labelFromRepo = await listRepoLabels(context);
 
 	names.forEach(name => {
-		const label = labelFromRepo.data.find(label => label.name === name);
+		const label = labelFromRepo.data.filter(label => label.name === name);
 
-		if (!label) {
+		if (label.length <= 0) {
 			if (color) this.createLabel(name, context, color);
 			else this.createLabel(name, context);
 		}

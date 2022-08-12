@@ -20,9 +20,6 @@ const labelCommand = async (context, args) => {
 	const labelsToAdd = [];
 
 	args.forEach(label => {
-		const foundRepoLabel = repoLabels.data.find(
-			repoLabel => repoLabel.name === label
-		);
 		const foundIssueLabel = issueLabels.data.find(
 			issueLabel => issueLabel.name === label
 		);
@@ -31,10 +28,6 @@ const labelCommand = async (context, args) => {
 			removeLabel(label, context);
 		} else {
 			labelsToAdd.push(label);
-		}
-
-		if (!foundRepoLabel) {
-			createLabel(label, context);
 		}
 	});
 

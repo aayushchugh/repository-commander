@@ -35,7 +35,6 @@ module.exports = app => {
 	app.on('pull_request.opened', addReadyForReviewLabel);
 	app.on('pull_request_review', addApprovedLabel);
 	app.on('pull_request.closed', addMergedLabel);
-
 	app.on('issues.closed', addLabelToIssueOnClose);
 
 	/* --------------------------------- ANCHOR Issue commands --------------------------------- */
