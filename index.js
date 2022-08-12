@@ -10,15 +10,8 @@ const labelCommand = require('./commands/label.command');
 const mergeCommand = require('./commands/merge.command');
 const { createComment, deleteComment } = require('./helpers/comment.helper');
 const getCommandAndArgs = require('./helpers/getCommandAndArgs.helper');
-const {
-	addLabel,
-	createLabel,
-	removeLabel,
-} = require('./helpers/label.helper');
-const {
-	listRepoLabels,
-	listIssueLabels,
-} = require('./helpers/listLabels.helper');
+const { addLabel } = require('./helpers/label.helper');
+const { listIssueLabels } = require('./helpers/listLabels.helper');
 
 /**
  * This is the main entrypoint to your Probot app
@@ -31,6 +24,26 @@ module.exports = app => {
 	app.on('pull_request.opened', addReadyForReviewLabel);
 	app.on('pull_request_review', addApprovedLabel);
 	app.on('pull_request.closed', addMergedLabel);
+
+	app.on('issues.closed', async context => {
+		const issueLabels = await listIssueLabels(context);
+
+		const previousBugLabel = issueLabels.data.find(
+			label => label.name === 'bug'
+		);
+
+		const previousFeatureLabel = issueLabels.data.find(
+			label => label.name === 'bug' || label.name === 'enhancement'
+		);
+
+		if (previousBugLabel) {
+			addLabel(['fixed'], context);
+		}
+
+		if (previousFeatureLabel) {
+			addLabel(['implemented'], context);
+		}
+	});
 
 	/* --------------------------------- ANCHOR Issue commands --------------------------------- */
 	app.on('issue_comment.created', async context => {

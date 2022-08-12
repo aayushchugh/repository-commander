@@ -1,11 +1,22 @@
 const randomColor = require('randomcolor');
+const { listRepoLabels } = require('./listLabels.helper');
 
 /**
  * Add a label to an issue
  * @param {string[]} names - Array of label names to add
  * @param {*} context Probot context
  */
-exports.addLabel = (names, context) => {
+exports.addLabel = async (names, context) => {
+	const issueFromRepo = await listRepoLabels(context);
+
+	names.forEach(name => {
+		const label = issueFromRepo.data.find(label => label.name === name);
+
+		if (!label) {
+			this.createLabel(name, context);
+		}
+	});
+
 	const newLabels = context.issue({
 		labels: names,
 	});
