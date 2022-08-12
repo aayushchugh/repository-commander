@@ -1,4 +1,3 @@
-const addLabelsBasedOnTitleAndBody = require('./automation/addLabelsBasedOnTitleAndBody.automation');
 const {
 	addReadyForReviewLabel,
 	addApprovedLabel,
@@ -27,11 +26,6 @@ const availableCommandsMessage = `Available commands are:-
  */
 module.exports = app => {
 	/* --------------------------------- ANCHOR Automation --------------------------------- */
-	app.on('issues.opened', addLabelsBasedOnTitleAndBody);
-	app.on('issues.edited', addLabelsBasedOnTitleAndBody);
-	// app.on('pull_request.opened', addLabelsBasedOnTitleAndBody);
-	app.on('pull_request.edited', addLabelsBasedOnTitleAndBody);
-
 	app.on('pull_request.opened', addReadyForReviewLabel);
 	app.on('pull_request_review', addApprovedLabel);
 	app.on('pull_request.closed', addMergedLabel);
