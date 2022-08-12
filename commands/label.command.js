@@ -1,4 +1,4 @@
-const createLabel = require('../helpers/createLabel.helper');
+const { createLabel, removeLabel } = require('../helpers/label.helper');
 const {
 	listRepoLabels,
 	listIssueLabels,
@@ -12,22 +12,35 @@ const {
  */
 const labelCommand = async (context, args) => {
 	const repoLabels = await listRepoLabels(context);
+	const issueLabels = await listIssueLabels(context);
+	const labelsToAdd = [];
 
 	args.forEach(label => {
-		const foundLabel = repoLabels.data.find(
+		const foundRepoLabel = repoLabels.data.find(
 			repoLabel => repoLabel.name === label
 		);
+		const foundIssueLabel = issueLabels.data.find(
+			issueLabel => issueLabel.name === label
+		);
 
-		if (!foundLabel) {
+		if (foundIssueLabel) {
+			removeLabel(label, context);
+		} else {
+			labelsToAdd.push(label);
+		}
+
+		if (!foundRepoLabel) {
 			createLabel(label, context);
 		}
 	});
 
-	const newLabels = context.issue({
-		labels: args,
-	});
+	if (labelsToAdd.length > 0) {
+		const newLabels = context.issue({
+			labels: labelsToAdd,
+		});
 
-	context.octokit.issues.addLabels(newLabels);
+		context.octokit.issues.addLabels(newLabels);
+	}
 };
 
 module.exports = labelCommand;
