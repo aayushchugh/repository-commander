@@ -1,12 +1,18 @@
+const addLabelsBasedOnTitleAndBody = require('./automation/addLabelsBasedOnTitleAndbody.automation');
 const labelCommand = require('./commands/label.command');
 const { createComment } = require('./helpers/comment.helper');
 const getCommandAndArgs = require('./helpers/getCommandAndArgs.helper');
+const { addLabel } = require('./helpers/label.helper');
+const { listRepoLabels } = require('./helpers/listLabels.helper');
 
 /**
  * This is the main entrypoint to your Probot app
  * @param {import('probot').Probot} app
  */
 module.exports = app => {
+	/* --------------------------------- ANCHOR issue opened --------------------------------- */
+	app.on('issues.opened', addLabelsBasedOnTitleAndBody);
+
 	/* --------------------------------- ANCHOR Issue commands --------------------------------- */
 	app.on('issue_comment.created', context => {
 		const { body } = context.payload.comment;

@@ -1,4 +1,8 @@
-const { createLabel, removeLabel } = require('../helpers/label.helper');
+const {
+	createLabel,
+	removeLabel,
+	addLabel,
+} = require('../helpers/label.helper');
 const {
 	listRepoLabels,
 	listIssueLabels,
@@ -35,11 +39,7 @@ const labelCommand = async (context, args) => {
 	});
 
 	if (labelsToAdd.length > 0) {
-		const newLabels = context.issue({
-			labels: labelsToAdd,
-		});
-
-		context.octokit.issues.addLabels(newLabels);
+		addLabel(labelsToAdd, context);
 	}
 };
 

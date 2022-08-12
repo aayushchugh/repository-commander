@@ -1,5 +1,13 @@
 const randomColor = require('randomcolor');
 
+exports.addLabel = (names, context) => {
+	const newLabels = context.issue({
+		labels: names,
+	});
+
+	context.octokit.issues.addLabels(newLabels);
+};
+
 exports.createLabel = (name, context, color) => {
 	return context.octokit.issues.createLabel({
 		name: name,
