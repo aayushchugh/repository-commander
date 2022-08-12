@@ -5,15 +5,17 @@ const { listRepoLabels } = require('./listLabels.helper');
  * Add a label to an issue
  * @param {string[]} names - Array of label names to add
  * @param {*} context Probot context
+ * @param {string | undefined} color  Label color
  */
-exports.addLabel = async (names, context) => {
+exports.addLabel = async (names, context, color) => {
 	const issueFromRepo = await listRepoLabels(context);
 
 	names.forEach(name => {
 		const label = issueFromRepo.data.find(label => label.name === name);
 
 		if (!label) {
-			this.createLabel(name, context);
+			if (color) this.createLabel(name, context, color);
+			else this.createLabel(name, context);
 		}
 	});
 
