@@ -1,4 +1,5 @@
 const addLabelsBasedOnTitleAndBody = require('./automation/addLabelsBasedOnTitleAndBody.automation');
+const approveCommand = require('./commands/approve.command');
 const closeCommand = require('./commands/close.command');
 const labelCommand = require('./commands/label.command');
 const { createComment, deleteComment } = require('./helpers/comment.helper');
@@ -25,10 +26,13 @@ module.exports = app => {
 			case '/close':
 				closeCommand(context);
 				break;
+			case '/approve':
+				approveCommand(context);
+				break;
 
 			default:
 				if (command[0] === '/') {
-					if (commentingUser !== 'shriproperty[bot]') {
+					if (!context.isBot()) {
 						createComment(
 							context,
 							`**${command}** command doesn't exist.
@@ -39,7 +43,7 @@ module.exports = app => {
 						);
 					}
 
-					if (commentingUser === 'shriproperty[bot]') {
+					if (context.isBot()) {
 						deleteComment(context);
 					}
 				}
