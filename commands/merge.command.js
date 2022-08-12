@@ -7,3 +7,5 @@ const mergeCommand = context => {
 
 	context.octokit.pulls.merge(merge);
 };
+
+module.exports = mergeCommand;

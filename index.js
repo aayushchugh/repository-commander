@@ -2,6 +2,7 @@ const addLabelsBasedOnTitleAndBody = require('./automation/addLabelsBasedOnTitle
 const approveCommand = require('./commands/approve.command');
 const closeCommand = require('./commands/close.command');
 const labelCommand = require('./commands/label.command');
+const mergeCommand = require('./commands/merge.command');
 const { createComment, deleteComment } = require('./helpers/comment.helper');
 const getCommandAndArgs = require('./helpers/getCommandAndArgs.helper');
 
@@ -17,7 +18,6 @@ module.exports = app => {
 	app.on('issue_comment.created', context => {
 		const { body } = context.payload.comment;
 		const { command, args } = getCommandAndArgs(body);
-		const commentingUser = context.payload.comment.user.login;
 
 		switch (command) {
 			case '/label':
@@ -30,6 +30,7 @@ module.exports = app => {
 				approveCommand(context);
 				break;
 			case '/merge':
+				approveCommand(context);
 				mergeCommand(context);
 				break;
 
