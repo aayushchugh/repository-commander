@@ -1,0 +1,18 @@
+name: Auto add issues to project
+
+on:
+    issues:
+        types:
+            - opened
+            - transferred
+            - labeled
+
+jobs:
+    add-to-project:
+        name: Add issue to project
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/add-to-project@main
+              with:
+                  project-url: https://github.com/orgs/shriproperty/projects/4
+                  github-token: ${{ secrets.GH_TOKEN }}

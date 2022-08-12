@@ -1,0 +1,17 @@
+name: Auto Add Pull request to project
+
+on:
+    pull_request:
+        types:
+            - labeled
+            - opened
+
+jobs:
+    add-to-project:
+        name: Add pull request to project
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/add-to-project@main
+              with:
+                  project-url: https://github.com/orgs/shriproperty/projects/4
+                  github-token: ${{ secrets.GH_TOKEN }}
