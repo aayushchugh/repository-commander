@@ -1,62 +1,36 @@
-const randomColor = require('randomcolor');
+const labelCommand = require('./commands/label.command');
+const { createComment } = require('./helpers/comment.helper');
+const getCommandAndArgs = require('./helpers/getCommandAndArgs.helper');
 
 /**
  * This is the main entrypoint to your Probot app
  * @param {import('probot').Probot} app
  */
 module.exports = app => {
-	// Your code here
-	app.log.info('Yay, the app was loaded!');
-
-	app.on('issues.opened', async context => {
-		const issueComment = context.issue({
-			body: 'Thanks for opening this issue!',
-		});
-		return context.octokit.issues.createComment(issueComment);
-	});
-
-	app.on('issue_comment.created', async context => {
-		// get comment body
+	/* --------------------------------- ANCHOR Issue commands --------------------------------- */
+	app.on('issue_comment.created', context => {
 		const { body } = context.payload.comment;
+		const { command, args } = getCommandAndArgs(body);
+		const commentingUser = context.payload.comment.user.login;
 
-		const split = body.split(' ');
-		const command = split[0];
-		const args = split.slice(1);
+		switch (command) {
+			case '/label':
+				labelCommand(context, args);
+				break;
 
-		if (command === '/label') {
-			const repoLabels = await context.octokit.issues.listLabelsForRepo({
-				owner: context.payload.repository.owner.login,
-				repo: context.payload.repository.name,
-			});
-
-			args.forEach(label => {
-				const foundLabel = repoLabels.data.find(
-					repoLabel => repoLabel.name === label
-				);
-
-				if (!foundLabel) {
-					context.octokit.issues.createLabel({
-						name: label,
-						owner: context.payload.repository.owner.login,
-						repo: context.payload.repository.name,
-						color: randomColor().split('#')[1],
-					});
+			default:
+				if (command[0] === '/') {
+					if (commentingUser !== 'shriproperty[bot]') {
+						createComment(
+							context,
+							`**${command}** command doesn't exist.
+						     Available commands are:- 
+						    - **/label** - Add labels to an issue.
+						    `
+						);
+					}
 				}
-			});
-
-			const newLabels = context.issue({
-				labels: args,
-			});
-
-			context.octokit.issues.addLabels(newLabels);
+				break;
 		}
-
-		// add label to issue
 	});
-
-	// For more information on building apps:
-	// https://probot.github.io/docs/
-
-	// To get your app running against GitHub, see:
-	// https://probot.github.io/docs/development/
 };
