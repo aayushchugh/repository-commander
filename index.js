@@ -45,26 +45,7 @@ module.exports = app => {
 				approveCommand(context);
 				break;
 			case '/merge':
-				const params = context.pullRequest();
-				const pullRequest = await context.octokit.pulls.get(params);
-
-				if (pullRequest.data.mergeable) {
-					const params = context.pullRequest();
-
-					const reviews = await context.octokit.pulls.listReviews(params);
-
-					const approvedReviews = reviews.data.filter(
-						review => review.state === 'APPROVED'
-					);
-
-					if (approvedReviews.length === 0) {
-						approveCommand(context);
-					}
-
-					mergeCommand(context);
-				} else {
-					createComment(context, ':warning: Pull request is not mergeable.');
-				}
+				mergeCommand(context);
 				break;
 
 			default:
