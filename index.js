@@ -4,14 +4,13 @@ const {
 	addApprovedLabel,
 	addMergedLabel,
 } = require('./automation/addLabelsOnPullRequest.automation');
+const addLabelToIssueOnClose = require('./automation/addLabelToIssueOnClose.automation');
 const approveCommand = require('./commands/approve.command');
 const closeCommand = require('./commands/close.command');
 const labelCommand = require('./commands/label.command');
 const mergeCommand = require('./commands/merge.command');
 const { createComment, deleteComment } = require('./helpers/comment.helper');
 const getCommandAndArgs = require('./helpers/getCommandAndArgs.helper');
-const { addLabel } = require('./helpers/label.helper');
-const { listIssueLabels } = require('./helpers/listLabels.helper');
 
 /**
  * This is the main entrypoint to your Probot app
@@ -20,30 +19,13 @@ const { listIssueLabels } = require('./helpers/listLabels.helper');
 module.exports = app => {
 	/* --------------------------------- ANCHOR Automation --------------------------------- */
 	app.on('issues.opened', addLabelsBasedOnTitleAndBody);
+	app.on('issues.edited', addLabelsBasedOnTitleAndBody);
 
 	app.on('pull_request.opened', addReadyForReviewLabel);
 	app.on('pull_request_review', addApprovedLabel);
 	app.on('pull_request.closed', addMergedLabel);
 
-	app.on('issues.closed', async context => {
-		const issueLabels = await listIssueLabels(context);
-
-		const previousBugLabel = issueLabels.data.find(
-			label => label.name === 'bug'
-		);
-
-		const previousFeatureLabel = issueLabels.data.find(
-			label => label.name === 'bug' || label.name === 'enhancement'
-		);
-
-		if (previousBugLabel) {
-			addLabel(['fixed'], context);
-		}
-
-		if (previousFeatureLabel) {
-			addLabel(['implemented'], context);
-		}
-	});
+	app.on('issues.closed', addLabelToIssueOnClose);
 
 	/* --------------------------------- ANCHOR Issue commands --------------------------------- */
 	app.on('issue_comment.created', async context => {
