@@ -8,10 +8,10 @@ const { listRepoLabels } = require('./listLabels.helper');
  * @param {string | undefined} color  Label color
  */
 exports.addLabel = async (names, context, color) => {
-	const issueFromRepo = await listRepoLabels(context);
+	const labelFromRepo = await listRepoLabels(context);
 
 	names.forEach(name => {
-		const label = issueFromRepo.data.find(label => label.name === name);
+		const label = labelFromRepo.data.find(label => label.name === name);
 
 		if (!label) {
 			if (color) this.createLabel(name, context, color);
