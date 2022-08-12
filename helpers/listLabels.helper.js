@@ -8,11 +8,9 @@ exports.listRepoLabels = async context => {
 };
 
 exports.listIssueLabels = async context => {
-	const issueLabels = await context.octokit.issues.listLabelsOnIssue({
-		owner: context.payload.repository.owner.login,
-		repo: context.payload.repository.name,
-		issue_number: context.payload.issue.number,
-	});
+	const params = context.issue();
+
+	const issueLabels = await context.octokit.issues.listLabelsOnIssue(params);
 
 	return issueLabels;
 };
