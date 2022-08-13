@@ -9,7 +9,7 @@ const {
 } = require('../helpers/listLabels.helper');
 
 exports.addReadyForReviewLabel = async context => {
-	addLabel([':mag: Ready For Review'], context);
+	addLabel([':mag: Ready for Review'], context);
 };
 
 exports.addApprovedLabel = async context => {
