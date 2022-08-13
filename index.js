@@ -2,6 +2,7 @@ const {
 	addReadyForReviewLabel,
 	addApprovedLabel,
 	addMergedLabel,
+	pullRequestWIPLabelAutomation,
 } = require('./automation/addLabelsOnPullRequest.automation');
 const addLabelToIssueOnClose = require('./automation/addLabelToIssueOnClose.automation');
 const approveCommand = require('./commands/approve.command');
@@ -11,7 +12,8 @@ const mergeCommand = require('./commands/merge.command');
 const WIPCommand = require('./commands/wip.command');
 const { createComment, deleteComment } = require('./helpers/comment.helper');
 const getCommandAndArgs = require('./helpers/getCommandAndArgs.helper');
-const { addLabel } = require('./helpers/label.helper');
+const { addLabel, removeLabel } = require('./helpers/label.helper');
+const { listIssueLabels } = require('./helpers/listLabels.helper');
 
 const availableCommandsMessage = `Available commands are:- 
 						    - **/label** - Add labels to an issue or pull request.
@@ -29,6 +31,12 @@ module.exports = app => {
 	app.on('pull_request.opened', addReadyForReviewLabel);
 	app.on('pull_request_review', addApprovedLabel);
 	app.on('pull_request.closed', addMergedLabel);
+
+	app.on(
+		['pull_request.edited', 'pull_request.labeled'],
+		pullRequestWIPLabelAutomation
+	);
+
 	app.on('issues.closed', addLabelToIssueOnClose);
 
 	/* --------------------------------- ANCHOR Issue commands --------------------------------- */
