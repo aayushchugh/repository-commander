@@ -43,6 +43,16 @@ module.exports = app => {
 	app.on('issue_comment.created', async context => {
 		const { body } = context.payload.comment;
 		const { command, args } = getCommandAndArgs(body);
+		const commentId = context.payload.comment.id;
+
+		if (command[0] === '/' && !context.isBot) {
+			const params = context.issue({
+				comment_id: commentId,
+				content: '+1',
+			});
+
+			context.octokit.reactions.createForIssueComment(params);
+		}
 
 		switch (command) {
 			case '/label':
@@ -64,6 +74,13 @@ module.exports = app => {
 			default:
 				if (command[0] === '/') {
 					if (!context.isBot) {
+						const params = context.issue({
+							comment_id: commentId,
+							content: '-1',
+						});
+
+						context.octokit.reactions.createForIssueComment(params);
+
 						createComment(
 							context,
 							`**${command}** command doesn't exist.
