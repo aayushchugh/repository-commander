@@ -15,7 +15,7 @@ jobs:
                   source-repo: shriproperty/.github
 
                   # If you want to delete any additional label, set this to true
-                  delete-other-labels: false
+                  delete-other-labels: true
 
                   # If you want the action just to show you the preview of the changes, without actually editing the labels, set this to true
                   dry-run: false
