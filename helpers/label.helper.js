@@ -1,5 +1,5 @@
 const randomColor = require('randomcolor');
-const { listRepoLabels } = require('./listLabels.helper');
+const { listRepoLabels, listIssueLabels } = require('./listLabels.helper');
 
 /**
  * Add a label to an issue
@@ -8,22 +8,32 @@ const { listRepoLabels } = require('./listLabels.helper');
  * @param {string | undefined} color  Label color
  */
 exports.addLabel = async (names, context, color) => {
-	const labelFromRepo = await listRepoLabels(context);
+	const labelsFromRepo = await listRepoLabels(context);
+	const labelsFromIssue = await listIssueLabels(context);
 
 	names.forEach(name => {
-		const label = labelFromRepo.data.filter(label => label.name === name);
+		const labelFromRepo = labelsFromRepo.data.filter(
+			label => label.name === name
+		);
 
-		if (label.length <= 0) {
+		const labelFromIssue = labelsFromIssue.data.filter(
+			label => label.name === name
+		);
+
+		if (labelFromRepo.length === 0) {
+			console.log('if');
 			if (color) this.createLabel(name, context, color);
 			else this.createLabel(name, context);
 		}
-	});
 
-	const newLabels = context.issue({
-		labels: names,
-	});
+		if (labelFromIssue.length === 0) {
+			const newLabels = context.issue({
+				labels: names,
+			});
 
-	context.octokit.issues.addLabels(newLabels);
+			context.octokit.issues.addLabels(newLabels);
+		}
+	});
 };
 
 /**

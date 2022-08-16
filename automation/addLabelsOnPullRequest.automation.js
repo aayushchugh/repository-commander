@@ -9,29 +9,51 @@ const {
 } = require('../helpers/listLabels.helper');
 
 exports.addReadyForReviewLabel = async context => {
-	addLabel([':mag: Ready For Review'], context);
+	addLabel([':mag: Ready for Review'], context);
 };
 
 exports.addApprovedLabel = async context => {
 	const params = context.pullRequest();
+	const issueLabels = await listIssueLabels(context);
 
 	const reviews = await context.octokit.pulls.listReviews(params);
+	const approvedLabel = issueLabels.data.filter(
+		label => label.name === ':white_check_mark: Approved'
+	);
+	const changesRequestedLabel = issueLabels.data.filter(
+		label => label.name === ':warning: Changes requested'
+	);
 
 	const approvedReviews = reviews.data.filter(
 		review => review.state === 'APPROVED'
 	);
 
+	const foundChangesRequestedReview = issueLabels.data.filter(
+		review => review.state === 'CHANGES_REQUESTED'
+	);
+
+	if (
+		foundChangesRequestedReview.length === 0 &&
+		changesRequestedLabel.length > 0
+	) {
+		removeLabel([':warning: Changes requested'], context);
+	}
+
+	if (approvedReviews.length === 0 && approvedLabel.length > 0) {
+		removeLabel([':white_check_mark: Approved'], context);
+	}
+
 	if (approvedReviews.length > 0) {
 		const issueLabels = await listIssueLabels(context);
 
 		const foundReviewLabel = issueLabels.data.filter(
-			label => label.name === ':mag: Ready For Review'
+			label => label.name === ':mag: Ready for Review'
 		);
 
 		addLabel([':white_check_mark: Approved'], context);
 
 		if (foundReviewLabel.length > 0) {
-			removeLabel([':mag: Ready For Review'], context);
+			removeLabel([':mag: Ready for Review'], context);
 		}
 	}
 };
@@ -83,7 +105,7 @@ exports.pullRequestWIPLabelAutomation = async context => {
 		label => label.name === ':construction: WIP'
 	);
 	const foundReadyForReviewLabel = issueLabels.data.filter(
-		label => label.name === ':mag: Ready For Review'
+		label => label.name === ':mag: Ready for Review'
 	);
 
 	if (
@@ -96,7 +118,7 @@ exports.pullRequestWIPLabelAutomation = async context => {
 		addLabel([':construction: WIP'], context);
 
 		if (foundReadyForReviewLabel.length === 0) {
-			removeLabel([':mag: Ready For Review'], context);
+			removeLabel([':mag: Ready for Review'], context);
 		}
 
 		return;
@@ -112,7 +134,7 @@ exports.pullRequestWIPLabelAutomation = async context => {
 		removeLabel([':construction: WIP'], context);
 
 		if (foundReadyForReviewLabel.length === 0) {
-			addLabel([':mag: Ready For Review'], context);
+			addLabel([':mag: Ready for Review'], context);
 		}
 
 		return;
@@ -129,13 +151,55 @@ exports.pullRequestWIPLabelAutomation = async context => {
 		}
 
 		if (foundReadyForReviewLabel.length > 0) {
-			removeLabel([':mag: Ready For Review'], context);
+			removeLabel([':mag: Ready for Review'], context);
 		}
 
 		return;
 	}
 
 	if (foundReadyForReviewLabel.length > 0 && foundWIPLabel.length > 0) {
-		return removeLabel([':mag: Ready For Review'], context);
+		return removeLabel([':mag: Ready for Review'], context);
+	}
+};
+
+exports.changesRequestLabel = async context => {
+	const issueLabels = await listIssueLabels(context);
+
+	const params = context.pullRequest();
+
+	const reviews = await context.octokit.pulls.listReviews(params);
+
+	const changesRequestedReviews = reviews.data.filter(
+		review => review.state === 'CHANGES_REQUESTED'
+	);
+
+	const foundChangedRequestedLabel = issueLabels.data.filter(
+		label => label.name === ':warning: Changes requested'
+	);
+
+	const foundReadyForReviewLabel = issueLabels.data.filter(
+		label => label.name === ':mag: Ready for Review'
+	);
+
+	const foundApprovedLabel = issueLabels.data.filter(
+		label => label.name === ':white_check_mark: Approved'
+	);
+
+	if (
+		changesRequestedReviews.length > 0 &&
+		foundChangedRequestedLabel.length === 0
+	) {
+		addLabel([':warning: Changes requested'], context, 'AA2626');
+	}
+
+	if (
+		changesRequestedReviews.length > 0 &&
+		foundReadyForReviewLabel.length > 0
+	) {
+		removeLabel([':mag: Ready for Review'], context);
+	}
+
+	if (changesRequestedReviews.length > 0 && foundApprovedLabel.length > 0) {
+		removeLabel([':white_check_mark: Approved'], context);
 	}
 };

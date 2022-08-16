@@ -3,6 +3,7 @@ const {
 	addApprovedLabel,
 	addMergedLabel,
 	pullRequestWIPLabelAutomation,
+	changesRequestLabel,
 } = require('./automation/addLabelsOnPullRequest.automation');
 const addLabelToIssueOnClose = require('./automation/addLabelToIssueOnClose.automation');
 const approveCommand = require('./commands/approve.command');
@@ -29,7 +30,10 @@ const availableCommandsMessage = `Available commands are:-
 module.exports = app => {
 	/* --------------------------------- ANCHOR Automation --------------------------------- */
 	app.on('pull_request.opened', addReadyForReviewLabel);
-	app.on('pull_request_review', addApprovedLabel);
+
+	app.on('pull_request_review.submitted', addApprovedLabel);
+	app.on('pull_request_review.submitted', changesRequestLabel);
+
 	app.on('pull_request.closed', addMergedLabel);
 
 	app.on(
