@@ -1,26 +1,19 @@
-# shriproperty
+# Shriproperty
 
-> A GitHub App built with [Probot](https://github.com/probot/probot) that A Probot app
+> A Github app that lets you automate your basic tasks by automatically adding labels to your pull requests and
+> using `/` commands in your comments to do some nice stuff like approving and merging pull requests.
 
-## Setup
+## Features
 
-```sh
-# Install dependencies
-npm install
+-
 
-# Run the bot
-npm start
-```
+## Feedback
 
-## Docker
+If you have any feedback, please create a issue or reach out to us at ayushchugh2006@gmail.com
 
-```sh
-# 1. Build container
-docker build -t shriproperty .
+## Support
 
-# 2. Start container
-docker run -e APP_ID=<app-id> -e PRIVATE_KEY=<pem-value> shriproperty
-```
+For support, please create a issue or reach out to us at ayushchugh2006@gmail.com
 
 ## Contributing
 
@@ -31,3 +24,7 @@ For more, check out the [Contributing Guide](CONTRIBUTING.md).
 ## License
 
 [ISC](LICENSE) © 2022 Ayush Chugh
+
+## Authors
+
+- [@aayushchugh](https://www.github.com/aayushchugh)
