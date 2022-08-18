@@ -35,7 +35,7 @@
 
 - When title contains `WIP`, `Work In Progress`, `:construction:` than add `WIP` Label (pull_request, issue (future release))
 
-  ![Add WIP label when title is updated](https://user-images.githubusercontent.com/69336518/185323550-62590bc5-bd11-4c4b-8b2d-aba079e4197b.gif)
+  ![Add WIP label when title is updated](https://user-images.githubusercontent.com/69336518/185333109-255911da-3f37-485a-ba7c-03b6af58ef75.gif)
 
 ### `/` command
 
