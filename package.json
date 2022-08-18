@@ -1,34 +1,40 @@
 {
-  "name": "shriproperty",
-  "version": "1.0.0",
-  "private": true,
-  "description": "A Probot app",
-  "author": "Ayush Chugh",
-  "license": "ISC",
-  "homepage": "https://github.com//",
-  "keywords": [
-    "probot",
-    "github",
-    "probot-app"
-  ],
-  "scripts": {
-    "start": "probot run ./index.js",
-    "test": "jest"
-  },
-  "dependencies": {
-    "probot": "^12.2.4",
-    "randomcolor": "^0.6.2",
-    "semantic-release": "^19.0.3"
-  },
-  "devDependencies": {
-    "jest": "^28.0.0",
-    "nock": "^13.0.5",
-    "smee-client": "^1.2.2"
-  },
-  "engines": {
-    "node": ">= 10.13.0"
-  },
-  "jest": {
-    "testEnvironment": "node"
-  }
+	"name": "shriproperty",
+	"version": "1.0.0",
+	"private": false,
+	"description": "Bot for automating all of your work",
+	"author": "Ayush Chugh",
+	"license": "ISC",
+	"homepage": "https://github.com//",
+	"keywords": [
+		"probot",
+		"github",
+		"probot-app",
+		"repocommander",
+		"automation",
+		"bot",
+		"automation bot",
+		"repository",
+		"manager"
+	],
+	"scripts": {
+		"start": "probot run ./index.js",
+		"test": "jest"
+	},
+	"dependencies": {
+		"probot": "12.2.5",
+		"randomcolor": "0.6.2",
+		"semantic-release": "19.0.3"
+	},
+	"devDependencies": {
+		"jest": "28.1.3",
+		"nock": "13.2.9",
+		"smee-client": "1.2.3"
+	},
+	"engines": {
+		"node": ">= 10.13.0"
+	},
+	"jest": {
+		"testEnvironment": "node"
+	}
 }
