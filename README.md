@@ -37,6 +37,10 @@
 
   ![Add WIP label when title is updated](https://user-images.githubusercontent.com/69336518/185333109-255911da-3f37-485a-ba7c-03b6af58ef75.gif)
 
+- When title is edited and `WIP` is removed from title than label will also be removed (pull_request, issue(future release))
+
+  ![Auto remove WIP label](https://user-images.githubusercontent.com/69336518/185333772-258192b8-6974-4a0c-8d05-7aa594f0067e.gif)
+
 ### `/` command
 
 - `/label <name ...>` (pull_request, issue)
