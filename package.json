@@ -24,7 +24,7 @@
 	"dependencies": {
 		"probot": "12.2.5",
 		"randomcolor": "0.6.2",
-		"semantic-release": "19.0.3"
+		"semantic-release": "19.0.4"
 	},
 	"devDependencies": {
 		"jest": "28.1.3",
