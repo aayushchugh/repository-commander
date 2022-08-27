@@ -22,8 +22,7 @@ const mergeCommand = async context => {
 	}
 
 	const merge = context.pullRequest({
-		commit_title: context.payload.issue.title,
-		merge_method: 'squash',
+		merge_method: 'rebase',
 	});
 
 	context.octokit.pulls.merge(merge);
