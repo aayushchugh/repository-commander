@@ -17,15 +17,20 @@ We'd also love PRs. If you're thinking of a large PR, we advise opening up an is
 ## Submitting a pull request
 
 1. [Fork][fork] and clone the repository.
-1. Configure and install the dependencies: `yarn install`.
-1. Create a new branch: `git checkout -b my-branch-name`.
-1. Push to your fork and [submit a pull request][pr].
-1. Pat your self on the back and wait for your pull request to be reviewed and merged.
+2. Configure and install the dependencies: `yarn install`.
+3. Create a new branch: `git checkout -b my-branch-name`.
+4. Work on your issue/feature
+5. Before commiting the changes run tests using `yarn test`
+6. Follow [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) for writing commit messages
+7. Push to your fork and [submit a pull request][pr] in `dev` branch
+8. Request [Ayush Chugh](https://github.com/aayushchugh) or [Arpit Chugh](https://github.com/arpitchugh) as review on the pull request
+9. Pat your self on the back and wait for your pull request to be approved and merged.
+
 
 Here are a few things you can do that will increase the likelihood of your pull request being accepted:
 
 - Keep your changes as focused as possible. If there are multiple changes you would like to make that are not dependent upon each other, consider submitting them as separate pull requests.
-- Follow [Conventional commits](https://www.bing.com/search?q=conventional+commits&cvid=f828d458bb9c4213b710c2b3095529c2&aqs=edge.0.0j69i57j0l7.2818j0j1&pglt=419&FORM=ANNTA1&PC=U531).
+- Follow [Conventional commits](https://www.conventionalcommits.org/en/v1.0.0/).
 
 Work in Progress pull requests are also welcome to get feedback early on, or if there is something blocked you.
 
