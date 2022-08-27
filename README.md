@@ -72,6 +72,42 @@
 - `/close` (pull_request, issue)
 
   ![Close command](https://user-images.githubusercontent.com/69336518/185327801-89852c28-8ec7-4a70-bde6-8025a4afe0a2.gif)
+  
+## Contributing
+
+If you have suggestions for how shriproperty could be improved, or want to report a bug, open an issue! We'd love all and any contributions.
+
+For more, check out the [Contributing Guide](CONTRIBUTING.md).
+
+## Run Locally
+
+You need to clone the [server](https://github.com/shriproperty/server) first and start it
+
+Clone the project
+
+```bash
+  git clone git@github.com:shriproperty/bot.git
+```
+
+Go to the project directory
+
+```bash
+  cd bot
+```
+
+Install dependencies
+
+```bash
+    yarn
+```
+
+Start the server
+
+```bash
+    yarn start
+```
+
+For further assistance checkout probot [docs](https://probot.github.io/docs/README/)
 
 ## Feedback
 
@@ -80,12 +116,6 @@ If you have any feedback, please create a issue or reach out to us at ayushchugh
 ## Support
 
 For support, please create a issue or reach out to us at ayushchugh2006@gmail.com
-
-## Contributing
-
-If you have suggestions for how shriproperty could be improved, or want to report a bug, open an issue! We'd love all and any contributions.
-
-For more, check out the [Contributing Guide](CONTRIBUTING.md).
 
 ## License
 
