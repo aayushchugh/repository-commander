@@ -14,5 +14,5 @@ jobs:
         steps:
             - uses: actions/add-to-project@main
               with:
-                  project-url: https://github.com/users/aayushchugh/projects/3
+                  project-url: https://github.com/orgs/shriproperty/projects/4
                   github-token: ${{ secrets.GH_TOKEN }}
