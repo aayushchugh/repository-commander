@@ -4,7 +4,7 @@ const {
 	addMergedLabel,
 	WIPLabelAutomation: pullRequestWIPLabelAutomation,
 	changesRequestLabel,
-	removeWIPLabel,
+	addCloseLabel,
 } = require("./automation/addLabelsOnPullRequest.automation");
 const addLabelToIssueOnClose = require("./automation/addLabelToIssueOnClose.automation");
 const approveCommand = require("./commands/approve.command");
@@ -34,7 +34,15 @@ module.exports = app => {
 
 	app.on("pull_request_review.submitted", addApprovedLabel);
 	app.on("pull_request_review.submitted", changesRequestLabel);
+
 	app.on("pull_request.closed", addMergedLabel);
+	app.on("pull_request.closed", addCloseLabel);
+
+	app.on(
+		["pull_request.edited", "pull_request.labeled"],
+		pullRequestWIPLabelAutomation
+	);
+
 	app.on("issues.closed", addLabelToIssueOnClose);
 
 	/* --------------------------------- ANCHOR Issue commands --------------------------------- */
