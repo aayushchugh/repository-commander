@@ -43,16 +43,16 @@ jobs:
             yarn install
             pm2 restart Bot
 
-   release:
-        needs: [deploy]
-        name: Release
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@master
-            - uses: actions/setup-node@v3
-              with:
-                  node-version: "16.x"
-            - run: npm i
-            - run: npx semantic-release
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+  release:
+    needs: [deploy]
+    name: Release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "16.x"
+      - run: npm i
+      - run: npx semantic-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
