@@ -139,3 +139,38 @@ exports.changesRequestLabel = async context => {
 		removeLabel([":white_check_mark: Approved"], context);
 	}
 };
+
+exports.addCloseLabel = async context => {
+	const params = context.pullRequest();
+
+	try {
+		const pullRequestIsMerged = await context.octokit.pulls.checkIfMerged(
+			params
+		);
+	} catch (err) {
+		const issueLabels = await listIssueLabels(context);
+		const foundReadyForReviewLabel = issueLabels.data.filter(
+			label => label.name === ":mag: Ready for Review"
+		);
+		const foundApprovedLabel = issueLabels.data.filter(
+			label => label.name === ":white_check_mark: Approved"
+		);
+		const foundChangesRequestedLabel = issueLabels.data.filter(
+			label => label.name === ":warning: Changes requested"
+		);
+
+		if (foundReadyForReviewLabel.length > 0) {
+			removeLabel([":mag: Ready for Review"], context);
+		}
+
+		if (foundApprovedLabel.length > 0) {
+			removeLabel([":white_check_mark: Approved"], context);
+		}
+
+		if (foundChangesRequestedLabel.length > 0) {
+			removeLabel([":warning: Changes requested"], context);
+		}
+
+		addLabel([":x: closed"], context, "B60205");
+	}
+};
