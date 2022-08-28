@@ -22,10 +22,10 @@
 		"test": "jest"
 	},
 	"dependencies": {
-		"@semantic-release/changelog": "^6.0.1",
-		"@semantic-release/git": "^10.0.1",
-		"@semantic-release/github": "^8.0.6",
-		"@semantic-release/release-notes-generator": "^10.0.3",
+		"@semantic-release/changelog": "6.0.1",
+		"@semantic-release/git": "10.0.1",
+		"@semantic-release/github": "8.0.6",
+		"@semantic-release/release-notes-generator": "10.0.3",
 		"probot": "12.2.5",
 		"randomcolor": "0.6.2",
 		"semantic-release": "19.0.5"
