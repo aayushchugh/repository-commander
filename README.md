@@ -6,10 +6,8 @@
 ## Features
 
 - Automatically add labels to pull requests eg:- `Approved`, `Merged`
-- Automatically add `WIP` label when title contains any of these keywords `WIP`, `Work In Progress`, `work in progress`, `🚧`
-- If `WIP` label is added by user than add `🚧` prefix to issue/pull_request title
 - `/` commands can be used in comments eg:- `/approve`, `/merge`, `/label documentation`
-- Bot will react with `👍` emoji when a command is found in comment
+- Bot will react with `:rocket:` emoji when a command is found in comment
 
 ## Demo
 
@@ -32,14 +30,6 @@
 - Merged (pull_request)
 
   ![Merged](https://user-images.githubusercontent.com/69336518/185300751-c0d47387-c2f3-400b-b6db-6637caa3e328.gif)
-
-- When title contains `WIP`, `Work In Progress`, `:construction:` than add `WIP` Label (pull_request, issue (future release))
-
-  ![Add WIP label when title is updated](https://user-images.githubusercontent.com/69336518/185333109-255911da-3f37-485a-ba7c-03b6af58ef75.gif)
-
-- When title is edited and `WIP` is removed from title than label will also be removed (pull_request, issue(future release))
-
-  ![Auto remove WIP label](https://user-images.githubusercontent.com/69336518/185333772-258192b8-6974-4a0c-8d05-7aa594f0067e.gif)
 
 ### `/` command
 
@@ -72,7 +62,7 @@
 - `/close` (pull_request, issue)
 
   ![Close command](https://user-images.githubusercontent.com/69336518/185327801-89852c28-8ec7-4a70-bde6-8025a4afe0a2.gif)
-  
+
 ## Contributing
 
 If you have suggestions for how shriproperty could be improved, or want to report a bug, open an issue! We'd love all and any contributions.
