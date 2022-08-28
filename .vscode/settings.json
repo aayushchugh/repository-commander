@@ -3,6 +3,7 @@
 		"issues",
 		"labels",
 		"pull_reqeust",
-		"workflows"
+		"workflows",
+		"commands"
 	]
 }
