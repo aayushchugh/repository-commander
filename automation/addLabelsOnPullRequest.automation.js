@@ -39,6 +39,10 @@ exports.addApprovedLabel = async context => {
 		removeLabel([":warning: Changes requested"], context);
 	}
 
+	if (approvedReviews.length === 0 && approvedLabel.length > 0) {
+		removeLabel([":white_check_mark: Approved"], context);
+	}
+
 	if (approvedReviews.length > 0) {
 		const issueLabels = await listIssueLabels(context);
 
@@ -78,7 +82,6 @@ exports.addMergedLabel = async context => {
 		if (foundWIPLabel.length > 0) {
 			removeLabel([":construction: WIP"], context);
 		}
-		console.log(title);
 
 		if (
 			title.includes("WIP") ||
@@ -199,5 +202,40 @@ exports.changesRequestLabel = async context => {
 
 	if (changesRequestedReviews.length > 0 && foundApprovedLabel.length > 0) {
 		removeLabel([":white_check_mark: Approved"], context);
+	}
+};
+
+exports.addCloseLabel = async context => {
+	const params = context.pullRequest();
+
+	try {
+		const pullRequestIsMerged = await context.octokit.pulls.checkIfMerged(
+			params
+		);
+	} catch (err) {
+		const issueLabels = await listIssueLabels(context);
+		const foundReadyForReviewLabel = issueLabels.data.filter(
+			label => label.name === ":mag: Ready for Review"
+		);
+		const foundApprovedLabel = issueLabels.data.filter(
+			label => label.name === ":white_check_mark: Approved"
+		);
+		const foundChangesRequestedLabel = issueLabels.data.filter(
+			label => label.name === ":warning: Changes requested"
+		);
+
+		if (foundReadyForReviewLabel.length > 0) {
+			removeLabel([":mag: Ready for Review"], context);
+		}
+
+		if (foundApprovedLabel.length > 0) {
+			removeLabel([":white_check_mark: Approved"], context);
+		}
+
+		if (foundChangesRequestedLabel.length > 0) {
+			removeLabel([":warning: Changes requested"], context);
+		}
+
+		addLabel([":x: closed"], context, "B60205");
 	}
 };

@@ -1,7 +1,7 @@
 name: Auto add Pull request to project
 
 on:
-  pull_requests:
+  pull_request:
     types:
       - opened
 
