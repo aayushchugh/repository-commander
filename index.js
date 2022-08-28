@@ -54,7 +54,7 @@ module.exports = app => {
 		if (command[0] === "/" && !context.isBot) {
 			const params = context.issue({
 				comment_id: commentId,
-				content: "+1",
+				content: "rocket",
 			});
 
 			context.octokit.reactions.createForIssueComment(params);

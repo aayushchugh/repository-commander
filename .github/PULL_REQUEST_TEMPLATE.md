@@ -2,12 +2,14 @@
 
 Please include a summary of the change and which issue is fixed. Please also include relevant motivation and context. List any dependencies that are required for this change.
 
-Fixes # (issue)
+Fixes #(issue)
 
 # Checklist:
 
--   [ ] I have performed a self-review of my own code
--   [ ] I have commented my code, particularly in hard-to-understand areas
--   [ ] I have made corresponding changes to the documentation (postman)
+- [ ] I have performed a self-review of my own code
+- [ ] I have commented my code, particularly in hard-to-understand areas
+- [ ] I have made corresponding changes to the documentation
 
-# Screenshots (optional)
+# Anything Else ?
+
+Links? References? Anything that will give us more context about the pull request
