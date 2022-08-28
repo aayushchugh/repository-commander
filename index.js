@@ -34,18 +34,7 @@ module.exports = app => {
 
 	app.on("pull_request_review.submitted", addApprovedLabel);
 	app.on("pull_request_review.submitted", changesRequestLabel);
-
 	app.on("pull_request.closed", addMergedLabel);
-
-	app.on(
-		["pull_request.edited", "pull_request.labeled"],
-		pullRequestWIPLabelAutomation
-	);
-
-	app.on("pull_request.unlabeled", pullRequestWIPLabelAutomation);
-
-	app.on("pull_request.unlabeled", removeWIPLabel);
-
 	app.on("issues.closed", addLabelToIssueOnClose);
 
 	/* --------------------------------- ANCHOR Issue commands --------------------------------- */
