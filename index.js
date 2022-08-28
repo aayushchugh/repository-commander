@@ -2,7 +2,6 @@ const {
 	addReadyForReviewLabel,
 	addApprovedLabel,
 	addMergedLabel,
-	WIPLabelAutomation: pullRequestWIPLabelAutomation,
 	changesRequestLabel,
 	addCloseLabel,
 } = require("./automation/addLabelsOnPullRequest.automation");
@@ -37,11 +36,6 @@ module.exports = app => {
 
 	app.on("pull_request.closed", addMergedLabel);
 	app.on("pull_request.closed", addCloseLabel);
-
-	app.on(
-		["pull_request.edited", "pull_request.labeled"],
-		pullRequestWIPLabelAutomation
-	);
 
 	app.on("issues.closed", addLabelToIssueOnClose);
 
