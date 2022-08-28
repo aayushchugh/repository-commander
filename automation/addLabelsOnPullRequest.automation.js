@@ -39,6 +39,10 @@ exports.addApprovedLabel = async context => {
 		removeLabel([":warning: Changes requested"], context);
 	}
 
+	if (approvedReviews.length === 0 && approvedLabel.length > 0) {
+		removeLabel([":white_check_mark: Approved"], context);
+	}
+
 	if (approvedReviews.length > 0) {
 		const issueLabels = await listIssueLabels(context);
 
@@ -78,7 +82,6 @@ exports.addMergedLabel = async context => {
 		if (foundWIPLabel.length > 0) {
 			removeLabel([":construction: WIP"], context);
 		}
-		console.log(title);
 
 		if (
 			title.includes("WIP") ||
