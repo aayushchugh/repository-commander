@@ -1,7 +1,13 @@
-# Shriproperty
+<div align="center">
 
-> A Github app that lets you automate your basic tasks by automatically adding labels to your pull requests and
-> using `/` commands in your comments to do some nice stuff like approving and merging pull requests.
+<img src="./logo.svg" height="200" width="200" alt="logo" align="center"/>
+<h1>
+ Repository Commander
+</h1>
+</div>
+
+A Github app that lets you automate your basic tasks by automatically adding labels to your pull requests and
+using `/` commands in your comments to do some nice stuff like approving and merging pull requests.
 
 ## Features
 
@@ -19,49 +25,47 @@
   - `enhancement` - `implemented`
   - `feature` - `implemented`
 
+> If these labels are not present in the repo than bot will create them automatically with random color
+
 - Ready for Review (pull_request)
 
-  ![Ready for Review](https://user-images.githubusercontent.com/69336518/185299230-7362c2ff-4cb1-44ef-acdc-0c933c664890.png)
+  ![Ready for Review](https://user-images.githubusercontent.com/69336518/187087709-33ae28db-8c9e-44a0-a231-45068ea34aef.png)
 
 - Approved (pull_request)
 
-  ![Approved](https://user-images.githubusercontent.com/69336518/185299944-c274526f-bdb3-4982-9a73-fbe089dc34f0.gif)
+  ![Approved](https://user-images.githubusercontent.com/69336518/187087871-38086613-059e-459e-954a-10506b5cabd8.gif)
 
 - Merged (pull_request)
 
-  ![Merged](https://user-images.githubusercontent.com/69336518/185300751-c0d47387-c2f3-400b-b6db-6637caa3e328.gif)
+  ![Merged](https://user-images.githubusercontent.com/69336518/187088126-7e59afe9-2cde-4831-8782-25f95837cd81.gif)
 
 ### `/` command
 
 - `/label <name ...>` (pull_request, issue)
 
-  ![Label command](https://user-images.githubusercontent.com/69336518/185309011-cac30676-bf99-4ad0-94ea-2aa1fa4b0a61.gif)
+  ![Label command](https://user-images.githubusercontent.com/69336518/187088515-67693ab6-4949-4a80-8ee2-0a6b2d1d266e.gif)
 
 - `/approve` (pull_request)
 
-  ![Approve command](https://user-images.githubusercontent.com/69336518/185306021-106db100-873d-4482-a882-df4f8764a559.gif)
+  ![Approve command](https://user-images.githubusercontent.com/69336518/187089239-5acfde34-cefb-47f8-8b8d-a82b84855ce9.gif)
 
 - `/merge` (pull_request)
 
-  Squash and Merge method will be used to merge the pull request.
+  Rebase and Merge method will be used to merge the pull request.
 
-  ![Merge Command](https://user-images.githubusercontent.com/69336518/185306473-3c614c19-0bc0-4772-9d40-c1e319b62ac7.gif)
+  ![Merge Command](https://user-images.githubusercontent.com/69336518/187089488-3df12116-eac0-4d3a-8309-f447a333ea3b.gif)
 
-  If changes are not approved but we use `/merge` than it will approve the changes first
+  You can bypass `/approve` command and execute `/merge` directly this will approve that changes first and than merge
 
-  ![Merge and Approve together](https://user-images.githubusercontent.com/69336518/185307260-7926f057-7606-44f2-95ee-ac041d7b7602.gif)
+  ![Merge and Approve together](https://user-images.githubusercontent.com/69336518/187089739-cd20508a-0b3f-4a00-99ce-550f6ccb4609.gif)
 
 - `/WIP` (pull_request, issue)
 
-  ![WIP](https://user-images.githubusercontent.com/69336518/185307806-96a8f3ae-f485-44ff-9164-ba81f6064df9.gif)
-
-  If we use `/WIP` again than it will remove `WIP` label and title
-
-  ![WIP again](https://user-images.githubusercontent.com/69336518/185308205-c6139e73-c2b5-409e-8396-fb382a4342dd.gif)
+  ![WIP](https://user-images.githubusercontent.com/69336518/187088635-24fe7609-eb40-47de-b1af-72210712d79a.gif)
 
 - `/close` (pull_request, issue)
 
-  ![Close command](https://user-images.githubusercontent.com/69336518/185327801-89852c28-8ec7-4a70-bde6-8025a4afe0a2.gif)
+  ![Close command](https://user-images.githubusercontent.com/69336518/187088876-68257a26-01ac-49d5-aa8f-310870874287.gif)
 
 ## Contributing
 
@@ -101,11 +105,11 @@ For further assistance checkout probot [docs](https://probot.github.io/docs/READ
 
 ## Feedback
 
-If you have any feedback, please create a issue or reach out to us at ayushchugh2006@gmail.com
+If you have any feedback, please create a issue or reach out to us at ayushchugh2006@gmail.com, info@shriproperty.com
 
 ## Support
 
-For support, please create a issue or reach out to us at ayushchugh2006@gmail.com
+For support, please create a issue or reach out to us at ayushchugh2006@gmail.com, info@shriproperty.com
 
 ## License
 
