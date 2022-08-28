@@ -7,7 +7,7 @@
 
 - Automatically add labels to pull requests eg:- `Approved`, `Merged`
 - `/` commands can be used in comments eg:- `/approve`, `/merge`, `/label documentation`
-- Bot will react with `:rocket:` emoji when a command is found in comment
+- Bot will react with `🚀` emoji when a command is found in comment
 
 ## Demo
 
