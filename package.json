@@ -1,7 +1,7 @@
 {
-	"name": "shriproperty",
-	"version": "1.0.0",
-	"private": false,
+	"name": "repository-commander",
+	"version": "1.6.0",
+	"private": true,
 	"description": "Bot for automating all of your work",
 	"author": "Ayush Chugh",
 	"license": "ISC",
@@ -11,6 +11,7 @@
 		"github",
 		"probot-app",
 		"repocommander",
+		"repository-commander",
 		"automation",
 		"bot",
 		"automation bot",
@@ -22,17 +23,18 @@
 		"test": "jest"
 	},
 	"dependencies": {
+		"probot": "12.2.5",
+		"randomcolor": "0.6.2"
+	},
+	"devDependencies": {
 		"@semantic-release/changelog": "6.0.1",
 		"@semantic-release/git": "10.0.1",
 		"@semantic-release/github": "8.0.6",
+		"@semantic-release/npm": "^9.0.1",
 		"@semantic-release/release-notes-generator": "10.0.3",
-		"probot": "12.2.5",
-		"randomcolor": "0.6.2",
-		"semantic-release": "19.0.5"
-	},
-	"devDependencies": {
 		"jest": "29.0.1",
 		"nock": "13.2.9",
+		"semantic-release": "19.0.5",
 		"smee-client": "1.2.3"
 	},
 	"engines": {
