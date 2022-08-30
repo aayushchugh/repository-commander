@@ -1,6 +1,6 @@
 name: "🐛 Bug report"
 description: "File a bug/issue"
-title: ":bug: <title>"
+title: "[BUG] :bug: <title>"
 labels: [":bug: bug", ":robot:  bot"]
 assignees: "aayushchugh"
 body:
