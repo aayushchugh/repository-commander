@@ -1,7 +1,7 @@
 name: "📝 Docs"
 description: "Found a security issue report it here"
 title: "[DOCS] :memo: <title>"
-labels: [":memo: documentation", ":computer: bot"]
+labels: [":memo: documentation", ":robot: bot"]
 assignees: "aayushchugh"
 body:
   - type: textarea
