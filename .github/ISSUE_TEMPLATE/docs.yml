@@ -1,16 +1,16 @@
-name: "✨ Feature Request"
-description: "Suggest and idea for this project"
-title: "[FEAT] :sparkles: <title>"
-labels: [":sparkles: enhancement", ":robot:  bot"]
+name: "📝 Docs"
+description: "Found a security issue report it here"
+title: "[DOCS] :memo: <title>"
+labels: [":memo: documentation", ":computer: bot"]
 assignees: "aayushchugh"
 body:
   - type: textarea
     id: description
     attributes:
       label: Description
-      description: A concise description of what you want in this project
+      description: A concise description if you want us to update or create new documentation
     validations:
-      required: true
+      required: false
   - type: textarea
     id: anything_else
     attributes:
