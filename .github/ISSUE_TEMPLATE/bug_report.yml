@@ -1,7 +1,7 @@
 name: "🐛 Bug report"
 description: "File a bug/issue"
 title: "[BUG] :bug: <title>"
-labels: [":bug: bug", ":robot:  bot"]
+labels: [":bug: bug", ":robot: bot"]
 assignees: "aayushchugh"
 body:
   - type: textarea
