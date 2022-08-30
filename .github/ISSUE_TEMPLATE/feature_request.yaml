@@ -1,6 +1,6 @@
 name: "✨ Feature Request"
 description: "Suggest and idea for this project"
-title: ":sparkles: <title>"
+title: "[FEAT] :sparkles: <title>"
 labels: [":sparkles: enhancement", ":robot:  bot"]
 assignees: "aayushchugh"
 body:
