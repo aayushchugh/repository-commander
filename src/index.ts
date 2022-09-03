@@ -1,20 +1,21 @@
 import { Probot } from "probot";
+import type { Context } from "probot";
 
-const {
+import {
 	addReadyForReviewLabel,
 	addApprovedLabel,
 	addMergedLabel,
 	changesRequestLabel,
 	addCloseLabel,
-} = require("../automation/addLabelsOnPullRequest.automation");
-const addLabelToIssueOnClose = require("../automation/addLabelToIssueOnClose.automation");
-const approveCommand = require("../commands/approve.command");
-const closeCommand = require("../commands/close.command");
-const labelCommand = require("../commands/label.command");
-const mergeCommand = require("../commands/merge.command");
-const WIPCommand = require("../commands/wip.command");
-const { createComment, deleteComment } = require("../helpers/comment.helper");
-const getCommandAndArgs = require("../helpers/getCommandAndArgs.helper");
+} from "./automation/addLabelsOnPullRequest.automation";
+import addLabelToIssueOnClose from "./automation/addLabelToIssueOnClose.automation";
+import approveCommand from "./commands/approve.command";
+import closeCommand from "./commands/close.command";
+import labelCommand from "./commands/label.command";
+import mergeCommand from "./commands/merge.command";
+import WIPCommand from "./commands/wip.command";
+import { createComment, deleteComment } from "./utils/comment.util";
+import getCommandAndArgs from "./utils/getCommandAndArgs.util";
 
 const availableCommandsMessage = `Available commands are:- 
 						    - **/label** - Add labels to an issue or pull request.
@@ -40,65 +41,68 @@ export = (app: Probot) => {
 	app.on("issues.closed", addLabelToIssueOnClose);
 
 	/* --------------------------------- ANCHOR Issue commands --------------------------------- */
-	app.on("issue_comment.created", async context => {
-		const { body } = context.payload.comment;
-		const { command, args } = getCommandAndArgs(body);
-		const commentId = context.payload.comment.id;
+	app.on(
+		"issue_comment.created",
+		async (context: Context<"issue_comment.created">) => {
+			const { body } = context.payload.comment;
+			const { command, args } = getCommandAndArgs(body);
+			const commentId = context.payload.comment.id;
 
-		if (command[0] === "/" && !context.isBot) {
-			const params = context.issue();
+			if (command[0] === "/" && !context.isBot) {
+				const params = context.issue();
 
-			// context.octokit.reactions.createForIssueComment(params);
-			context.octokit.reactions.createForIssueComment({
-				owner: params.owner,
-				repo: params.repo,
-				comment_id: commentId,
-				content: "rocket",
-			});
-		}
+				// context.octokit.reactions.createForIssueComment(params);
+				context.octokit.reactions.createForIssueComment({
+					owner: params.owner,
+					repo: params.repo,
+					comment_id: commentId,
+					content: "rocket",
+				});
+			}
 
-		switch (command) {
-			case "/label":
-				labelCommand(context, args);
-				break;
-			case "/close":
-				closeCommand(context);
-				break;
-			case "/approve":
-				approveCommand(context);
-				break;
-			case "/merge":
-				mergeCommand(context);
-				break;
-			case "/WIP":
-				WIPCommand(context);
-				break;
+			switch (command) {
+				case "/label":
+					labelCommand(context, args);
+					break;
+				case "/close":
+					closeCommand(context);
+					break;
+				case "/approve":
+					approveCommand(context);
+					break;
+				case "/merge":
+					mergeCommand(context);
+					break;
+				case "/WIP":
+					WIPCommand(context);
+					break;
 
-			default:
-				if (command[0] === "/") {
-					if (!context.isBot) {
-						const params = context.issue();
+				default:
+					if (command[0] === "/") {
+						if (!context.isBot) {
+							const params = context.issue();
 
-						context.octokit.reactions.createForIssueComment({
-							owner: params.owner,
-							repo: params.repo,
-							comment_id: commentId,
-							content: "-1",
-						});
+							context.octokit.reactions.createForIssueComment({
+								owner: params.owner,
+								repo: params.repo,
+								comment_id: commentId,
+								content: "-1",
+							});
 
-						createComment(
-							context,
-							`**${command}** command doesn't exist.
+							createComment(
+								context,
+								`**${command}** command doesn't exist.
 						     ${availableCommandsMessage}
 						    `
-						);
-					}
+							);
+						}
 
-					if (context.isBot) {
-						deleteComment(context);
+						if (context.isBot) {
+							deleteComment(context);
+						}
 					}
-				}
-				break;
+					break;
+			}
 		}
-	});
+	);
 };
