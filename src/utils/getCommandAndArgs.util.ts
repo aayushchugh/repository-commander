@@ -1,4 +1,4 @@
-const getCommandAndArgs = body => {
+function getCommandAndArgs(body: string) {
 	const split = body.trim().split(" ");
 	const command = split[0];
 	const args = split.slice(1);
@@ -7,6 +7,6 @@ const getCommandAndArgs = body => {
 		command,
 		args,
 	};
-};
+}
 
-module.exports = getCommandAndArgs;
+export default getCommandAndArgs;

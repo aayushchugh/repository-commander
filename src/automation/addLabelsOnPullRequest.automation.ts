@@ -1,18 +1,13 @@
-const {
-	createLabel,
-	addLabel,
-	removeLabel,
-} = require("../helpers/label.helper");
-const {
-	listRepoLabels,
-	listIssueLabels,
-} = require("../helpers/listLabels.helper");
+import { Context } from "probot";
 
-exports.addReadyForReviewLabel = async context => {
+import { addLabel, removeLabel } from "../utils/label.util";
+import { listIssueLabels } from "../utils/listLabels.util";
+
+export async function addReadyForReviewLabel(context: Context) {
 	addLabel([":mag: Ready for Review"], context);
-};
+}
 
-exports.addApprovedLabel = async context => {
+export async function addApprovedLabel(context: Context) {
 	const params = context.pullRequest();
 	const issueLabels = await listIssueLabels(context);
 
@@ -28,7 +23,7 @@ exports.addApprovedLabel = async context => {
 		review => review.state === "APPROVED"
 	);
 
-	const foundChangesRequestedReview = issueLabels.data.filter(
+	const foundChangesRequestedReview = reviews.data.filter(
 		review => review.state === "CHANGES_REQUESTED"
 	);
 
@@ -36,11 +31,11 @@ exports.addApprovedLabel = async context => {
 		foundChangesRequestedReview.length === 0 &&
 		changesRequestedLabel.length > 0
 	) {
-		removeLabel([":warning: Changes requested"], context);
+		removeLabel(":warning: Changes requested", context);
 	}
 
 	if (approvedReviews.length === 0 && approvedLabel.length > 0) {
-		removeLabel([":white_check_mark: Approved"], context);
+		removeLabel(":white_check_mark: Approved", context);
 	}
 
 	if (approvedReviews.length > 0) {
@@ -55,15 +50,16 @@ exports.addApprovedLabel = async context => {
 		}
 
 		if (foundReviewLabel.length > 0) {
-			removeLabel([":mag: Ready for Review"], context);
+			removeLabel(":mag: Ready for Review", context);
 		}
 	}
-};
+}
 
-exports.addMergedLabel = async context => {
+export async function addMergedLabel(context: Context<"pull_request.closed">) {
 	const { title } = context.payload.pull_request;
 
 	if (context.payload.pull_request.merged) {
+		//@ts-ignore
 		const issueLabels = await listIssueLabels(context);
 
 		const foundApproveLabel = issueLabels.data.filter(
@@ -76,11 +72,11 @@ exports.addMergedLabel = async context => {
 		addLabel([":sparkles: Merged:"], context);
 
 		if (foundApproveLabel.length > 0) {
-			removeLabel([":white_check_mark: Approved"], context);
+			removeLabel(":white_check_mark: Approved", context);
 		}
 
 		if (foundWIPLabel.length > 0) {
-			removeLabel([":construction: WIP"], context);
+			removeLabel(":construction: WIP", context);
 		}
 
 		if (
@@ -96,9 +92,9 @@ exports.addMergedLabel = async context => {
 			context.octokit.pulls.update(params);
 		}
 	}
-};
+}
 
-exports.changesRequestLabel = async context => {
+export async function changesRequestLabel(context: Context) {
 	const issueLabels = await listIssueLabels(context);
 
 	const params = context.pullRequest();
@@ -132,21 +128,16 @@ exports.changesRequestLabel = async context => {
 		changesRequestedReviews.length > 0 &&
 		foundReadyForReviewLabel.length > 0
 	) {
-		removeLabel([":mag: Ready for Review"], context);
+		removeLabel(":mag: Ready for Review", context);
 	}
 
 	if (changesRequestedReviews.length > 0 && foundApprovedLabel.length > 0) {
-		removeLabel([":white_check_mark: Approved"], context);
+		removeLabel(":white_check_mark: Approved", context);
 	}
-};
+}
 
-exports.addCloseLabel = async context => {
-	const params = context.pullRequest();
-
+export async function addCloseLabel(context: Context<"pull_request.closed">) {
 	try {
-		const pullRequestIsMerged = await context.octokit.pulls.checkIfMerged(
-			params
-		);
 	} catch (err) {
 		const issueLabels = await listIssueLabels(context);
 		const foundReadyForReviewLabel = issueLabels.data.filter(
@@ -160,17 +151,17 @@ exports.addCloseLabel = async context => {
 		);
 
 		if (foundReadyForReviewLabel.length > 0) {
-			removeLabel([":mag: Ready for Review"], context);
+			removeLabel(":mag: Ready for Review", context);
 		}
 
 		if (foundApprovedLabel.length > 0) {
-			removeLabel([":white_check_mark: Approved"], context);
+			removeLabel(":white_check_mark: Approved", context);
 		}
 
 		if (foundChangesRequestedLabel.length > 0) {
-			removeLabel([":warning: Changes requested"], context);
+			removeLabel(":warning: Changes requested", context);
 		}
 
 		addLabel([":x: closed"], context, "B60205");
 	}
-};
+}
