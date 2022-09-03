@@ -1,20 +1,20 @@
+import { Probot } from "probot";
+
 const {
 	addReadyForReviewLabel,
 	addApprovedLabel,
 	addMergedLabel,
 	changesRequestLabel,
 	addCloseLabel,
-} = require("./automation/addLabelsOnPullRequest.automation");
-const addLabelToIssueOnClose = require("./automation/addLabelToIssueOnClose.automation");
-const approveCommand = require("./commands/approve.command");
-const closeCommand = require("./commands/close.command");
-const labelCommand = require("./commands/label.command");
-const mergeCommand = require("./commands/merge.command");
-const WIPCommand = require("./commands/wip.command");
-const { createComment, deleteComment } = require("./helpers/comment.helper");
-const getCommandAndArgs = require("./helpers/getCommandAndArgs.helper");
-const { addLabel, removeLabel } = require("./helpers/label.helper");
-const { listIssueLabels } = require("./helpers/listLabels.helper");
+} = require("../automation/addLabelsOnPullRequest.automation");
+const addLabelToIssueOnClose = require("../automation/addLabelToIssueOnClose.automation");
+const approveCommand = require("../commands/approve.command");
+const closeCommand = require("../commands/close.command");
+const labelCommand = require("../commands/label.command");
+const mergeCommand = require("../commands/merge.command");
+const WIPCommand = require("../commands/wip.command");
+const { createComment, deleteComment } = require("../helpers/comment.helper");
+const getCommandAndArgs = require("../helpers/getCommandAndArgs.helper");
 
 const availableCommandsMessage = `Available commands are:- 
 						    - **/label** - Add labels to an issue or pull request.
@@ -27,7 +27,7 @@ const availableCommandsMessage = `Available commands are:-
  * This is the main entrypoint to your Probot app
  * @param {import('probot').Probot} app
  */
-module.exports = app => {
+export = (app: Probot) => {
 	/* --------------------------------- ANCHOR Automation --------------------------------- */
 	app.on("pull_request.opened", addReadyForReviewLabel);
 
@@ -46,12 +46,15 @@ module.exports = app => {
 		const commentId = context.payload.comment.id;
 
 		if (command[0] === "/" && !context.isBot) {
-			const params = context.issue({
+			const params = context.issue();
+
+			// context.octokit.reactions.createForIssueComment(params);
+			context.octokit.reactions.createForIssueComment({
+				owner: params.owner,
+				repo: params.repo,
 				comment_id: commentId,
 				content: "rocket",
 			});
-
-			context.octokit.reactions.createForIssueComment(params);
 		}
 
 		switch (command) {
@@ -74,12 +77,14 @@ module.exports = app => {
 			default:
 				if (command[0] === "/") {
 					if (!context.isBot) {
-						const params = context.issue({
+						const params = context.issue();
+
+						context.octokit.reactions.createForIssueComment({
+							owner: params.owner,
+							repo: params.repo,
 							comment_id: commentId,
 							content: "-1",
 						});
-
-						context.octokit.reactions.createForIssueComment(params);
 
 						createComment(
 							context,
