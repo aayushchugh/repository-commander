@@ -1,8 +1,7 @@
 name: "🔒 Security Issue"
 description: "Found a security issue report it here"
 title: "[SECURITY] :lock: <title>"
-labels: [":lock: security", ":robot: bot"]
-assignees: "aayushchugh"
+labels: [":lock: security"]
 body:
   - type: textarea
     id: description

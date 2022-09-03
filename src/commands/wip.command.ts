@@ -1,8 +1,9 @@
-const { addLabel, removeLabel } = require("../helpers/label.helper");
-const { listIssueLabels } = require("../helpers/listLabels.helper");
+import type { Context } from "probot";
+import { addLabel, removeLabel } from "../utils/label.util";
+import { listIssueLabels } from "../utils/listLabels.util";
 
-const WIPCommand = async context => {
-	const { title } = context.payload.issue || context.payload.pull_request;
+async function WIPCommand(context: Context<"issue_comment.created">) {
+	const { title } = context.payload.issue;
 	const labelsFromIssues = await listIssueLabels(context);
 
 	const wipLabel = labelsFromIssues.data.find(
@@ -30,7 +31,7 @@ const WIPCommand = async context => {
 			addLabel([":mag: Ready for Review"], context);
 		}
 
-		return removeLabel(":construction: WIP", context);
+		removeLabel(":construction: WIP", context);
 	}
 
 	if (!wipLabel) {
@@ -53,6 +54,6 @@ const WIPCommand = async context => {
 
 		context.octokit.issues.update(params);
 	}
-};
+}
 
-module.exports = WIPCommand;
+export default WIPCommand;

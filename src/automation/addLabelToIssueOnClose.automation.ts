@@ -1,7 +1,8 @@
-const { addLabel } = require("../helpers/label.helper");
-const { listIssueLabels } = require("../helpers/listLabels.helper");
+import type { Context } from "probot";
+import { addLabel } from "../utils/label.util";
+import { listIssueLabels } from "../utils/listLabels.util";
 
-const addLabelToIssueOnClose = async context => {
+async function addLabelToIssueOnClose(context: Context) {
 	const issueLabels = await listIssueLabels(context);
 
 	const previousBugLabel = issueLabels.data.find(label => label.name === "bug");
@@ -17,6 +18,6 @@ const addLabelToIssueOnClose = async context => {
 	if (previousFeatureLabel) {
 		addLabel(["implemented"], context);
 	}
-};
+}
 
-module.exports = addLabelToIssueOnClose;
+export default addLabelToIssueOnClose;
