@@ -45,7 +45,19 @@
 		"nock": "13.2.9",
 		"semantic-release": "19.0.5",
 		"smee-client": "1.2.3",
-		"typescript": "^4.8.2"
+		"typescript": "^4.8.2",
+		"eslint": "8.23.0",
+		"eslint-config-google": "0.14.0",
+		"eslint-config-prettier": "8.5.0",
+		"eslint-import-resolver-typescript": "3.5.0",
+		"eslint-plugin-import": "2.26.0",
+		"eslint-plugin-jsonc": "2.4.0",
+		"eslint-plugin-no-secrets": "0.8.9",
+		"eslint-plugin-no-unsanitized": "4.0.1",
+		"eslint-plugin-node": "11.1.0",
+		"eslint-plugin-pii": "1.0.2",
+		"eslint-plugin-prettier": "4.2.1",
+		"eslint-plugin-sonarjs": "0.15.0"
 	},
 	"engines": {
 		"node": ">= 10.13.0"

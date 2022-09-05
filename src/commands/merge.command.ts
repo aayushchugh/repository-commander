@@ -12,7 +12,7 @@ async function mergeCommand(context: Context<"issue_comment.created">) {
 
 	createComment(
 		context,
-		`Merging this pull_request as requested by @${context.payload.comment.user.login}`
+		`Merging this pull_request as requested by @${context.payload.comment.user.login}`,
 	);
 
 	context.octokit.pulls.merge({

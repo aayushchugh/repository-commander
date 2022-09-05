@@ -7,7 +7,7 @@ function closeCommand(context: Context<"issue_comment.created">) {
 	// @ts-ignore
 	createComment(
 		context,
-		`Closing this issue as requested by @${context.payload.comment.user.login}`
+		`Closing this issue as requested by @${context.payload.comment.user.login}`,
 	);
 
 	context.octokit.issues.update({

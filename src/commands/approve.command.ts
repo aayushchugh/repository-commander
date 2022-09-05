@@ -7,7 +7,7 @@ async function approveCommand(context: Context<"issue_comment.created">) {
 	// @ts-ignore
 	createComment(
 		context,
-		`Approving changes of this pull_request as requested by @${context.payload.comment.user.login}`
+		`Approving changes of this pull_request as requested by @${context.payload.comment.user.login}`,
 	);
 
 	await context.octokit.pulls.createReview({
