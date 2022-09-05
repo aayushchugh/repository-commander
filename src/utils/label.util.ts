@@ -8,22 +8,14 @@ import { listRepoLabels, listIssueLabels } from "./listLabels.util";
  * @param {Context} context Probot context
  * @param {string | undefined} color  Label color
  */
-export async function addLabel(
-	names: string[],
-	context: Context,
-	color?: string
-) {
+export async function addLabel(names: string[], context: Context, color?: string) {
 	const labelsFromRepo = await listRepoLabels(context);
 	const labelsFromIssue = await listIssueLabels(context);
 
-	names.forEach(name => {
-		const labelFromRepo = labelsFromRepo.data.filter(
-			label => label.name === name
-		);
+	names.forEach((name) => {
+		const labelFromRepo = labelsFromRepo.data.filter((label) => label.name === name);
 
-		const labelFromIssue = labelsFromIssue.data.filter(
-			label => label.name === name
-		);
+		const labelFromIssue = labelsFromIssue.data.filter((label) => label.name === name);
 
 		if (labelFromRepo.length === 0) {
 			console.log("if");

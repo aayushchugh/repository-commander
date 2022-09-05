@@ -23,6 +23,7 @@ jobs:
         run: |
           npm i -g pnpm --force
           pnpm install --force
+          pnpm build
         env:
           CI: true
 
@@ -42,6 +43,7 @@ jobs:
             cd ~/bot
             git pull origin main
             pnpm install --force
+            pnpm build
             pm2 restart Bot
 
   release:

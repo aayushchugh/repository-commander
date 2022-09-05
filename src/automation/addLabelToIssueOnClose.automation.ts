@@ -5,10 +5,10 @@ import { listIssueLabels } from "../utils/listLabels.util";
 async function addLabelToIssueOnClose(context: Context) {
 	const issueLabels = await listIssueLabels(context);
 
-	const previousBugLabel = issueLabels.data.find(label => label.name === "bug");
+	const previousBugLabel = issueLabels.data.find((label) => label.name === "bug");
 
 	const previousFeatureLabel = issueLabels.data.find(
-		label => label.name === "feature" || label.name === "enhancement"
+		(label) => label.name === "feature" || label.name === "enhancement",
 	);
 
 	if (previousBugLabel) {
