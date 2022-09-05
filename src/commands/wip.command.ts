@@ -26,7 +26,7 @@ async function WIPCommand(context: Context<"issue_comment.created">) {
 	}
 
 	if (wipLabel) {
-		if (!foundReadyForReviewLabel) {
+		if (!foundReadyForReviewLabel && context.payload.issue.pull_request) {
 			addLabel([":mag: Ready for Review"], context);
 		}
 
