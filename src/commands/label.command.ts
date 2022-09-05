@@ -8,16 +8,13 @@ import type { Context } from "probot";
  * @param {*} context  Probot context
  * @param {*} args  Arguments passed to the command
  */
-async function labelCommand(
-	context: Context<"issue_comment.created">,
-	args: string[]
-) {
+async function labelCommand(context: Context<"issue_comment.created">, args: string[]) {
 	const labelsFromIssue = await listIssueLabels(context);
 	const labelsToAdd: string[] = [];
 
-	args.forEach(label => {
+	args.forEach((label) => {
 		const foundIssueLabel = labelsFromIssue.data.find(
-			issueLabel => issueLabel.name === label
+			(issueLabel) => issueLabel.name === label,
 		);
 
 		if (foundIssueLabel) {

@@ -4,13 +4,12 @@ import { listIssueLabels } from "../utils/listLabels.util";
 
 async function WIPCommand(context: Context<"issue_comment.created">) {
 	const { title } = context.payload.issue;
+	// @ts-ignore
 	const labelsFromIssues = await listIssueLabels(context);
 
-	const wipLabel = labelsFromIssues.data.find(
-		label => label.name === ":construction: WIP"
-	);
+	const wipLabel = labelsFromIssues.data.find((label) => label.name === ":construction: WIP");
 	const foundReadyForReviewLabel = labelsFromIssues.data.find(
-		label => label.name === ":mag: Ready for Review"
+		(label) => label.name === ":mag: Ready for Review",
 	);
 
 	if (

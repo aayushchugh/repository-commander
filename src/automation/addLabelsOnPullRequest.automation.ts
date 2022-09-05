@@ -13,24 +13,19 @@ export async function addApprovedLabel(context: Context) {
 
 	const reviews = await context.octokit.pulls.listReviews(params);
 	const approvedLabel = issueLabels.data.filter(
-		label => label.name === ":white_check_mark: Approved"
+		(label) => label.name === ":white_check_mark: Approved",
 	);
 	const changesRequestedLabel = issueLabels.data.filter(
-		label => label.name === ":warning: Changes requested"
+		(label) => label.name === ":warning: Changes requested",
 	);
 
-	const approvedReviews = reviews.data.filter(
-		review => review.state === "APPROVED"
-	);
+	const approvedReviews = reviews.data.filter((review) => review.state === "APPROVED");
 
 	const foundChangesRequestedReview = reviews.data.filter(
-		review => review.state === "CHANGES_REQUESTED"
+		(review) => review.state === "CHANGES_REQUESTED",
 	);
 
-	if (
-		foundChangesRequestedReview.length === 0 &&
-		changesRequestedLabel.length > 0
-	) {
+	if (foundChangesRequestedReview.length === 0 && changesRequestedLabel.length > 0) {
 		removeLabel(":warning: Changes requested", context);
 	}
 
@@ -42,7 +37,7 @@ export async function addApprovedLabel(context: Context) {
 		const issueLabels = await listIssueLabels(context);
 
 		const foundReviewLabel = issueLabels.data.filter(
-			label => label.name === ":mag: Ready for Review"
+			(label) => label.name === ":mag: Ready for Review",
 		);
 
 		if (approvedLabel.length === 0) {
@@ -63,10 +58,10 @@ export async function addMergedLabel(context: Context<"pull_request.closed">) {
 		const issueLabels = await listIssueLabels(context);
 
 		const foundApproveLabel = issueLabels.data.filter(
-			label => label.name === ":white_check_mark: Approved"
+			(label) => label.name === ":white_check_mark: Approved",
 		);
 		const foundWIPLabel = issueLabels.data.filter(
-			label => label.name === ":construction: WIP"
+			(label) => label.name === ":construction: WIP",
 		);
 
 		addLabel([":sparkles: Merged:"], context);
@@ -102,32 +97,26 @@ export async function changesRequestLabel(context: Context) {
 	const reviews = await context.octokit.pulls.listReviews(params);
 
 	const changesRequestedReviews = reviews.data.filter(
-		review => review.state === "CHANGES_REQUESTED"
+		(review) => review.state === "CHANGES_REQUESTED",
 	);
 
 	const foundChangedRequestedLabel = issueLabels.data.filter(
-		label => label.name === ":warning: Changes requested"
+		(label) => label.name === ":warning: Changes requested",
 	);
 
 	const foundReadyForReviewLabel = issueLabels.data.filter(
-		label => label.name === ":mag: Ready for Review"
+		(label) => label.name === ":mag: Ready for Review",
 	);
 
 	const foundApprovedLabel = issueLabels.data.filter(
-		label => label.name === ":white_check_mark: Approved"
+		(label) => label.name === ":white_check_mark: Approved",
 	);
 
-	if (
-		changesRequestedReviews.length > 0 &&
-		foundChangedRequestedLabel.length === 0
-	) {
+	if (changesRequestedReviews.length > 0 && foundChangedRequestedLabel.length === 0) {
 		addLabel([":warning: Changes requested"], context, "AA2626");
 	}
 
-	if (
-		changesRequestedReviews.length > 0 &&
-		foundReadyForReviewLabel.length > 0
-	) {
+	if (changesRequestedReviews.length > 0 && foundReadyForReviewLabel.length > 0) {
 		removeLabel(":mag: Ready for Review", context);
 	}
 
@@ -141,13 +130,13 @@ export async function addCloseLabel(context: Context<"pull_request.closed">) {
 	} catch (err) {
 		const issueLabels = await listIssueLabels(context);
 		const foundReadyForReviewLabel = issueLabels.data.filter(
-			label => label.name === ":mag: Ready for Review"
+			(label) => label.name === ":mag: Ready for Review",
 		);
 		const foundApprovedLabel = issueLabels.data.filter(
-			label => label.name === ":white_check_mark: Approved"
+			(label) => label.name === ":white_check_mark: Approved",
 		);
 		const foundChangesRequestedLabel = issueLabels.data.filter(
-			label => label.name === ":warning: Changes requested"
+			(label) => label.name === ":warning: Changes requested",
 		);
 
 		if (foundReadyForReviewLabel.length > 0) {

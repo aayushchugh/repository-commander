@@ -41,68 +41,65 @@ export = (app: Probot) => {
 	app.on("issues.closed", addLabelToIssueOnClose);
 
 	/* --------------------------------- ANCHOR Issue commands --------------------------------- */
-	app.on(
-		"issue_comment.created",
-		async (context: Context<"issue_comment.created">) => {
-			const { body } = context.payload.comment;
-			const { command, args } = getCommandAndArgs(body);
-			const commentId = context.payload.comment.id;
+	app.on("issue_comment.created", async (context: Context<"issue_comment.created">) => {
+		const { body } = context.payload.comment;
+		const { command, args } = getCommandAndArgs(body);
+		const commentId = context.payload.comment.id;
 
-			if (command[0] === "/" && !context.isBot) {
-				const params = context.issue();
+		if (command[0] === "/" && !context.isBot) {
+			const params = context.issue();
 
-				// context.octokit.reactions.createForIssueComment(params);
-				context.octokit.reactions.createForIssueComment({
-					owner: params.owner,
-					repo: params.repo,
-					comment_id: commentId,
-					content: "rocket",
-				});
-			}
-
-			switch (command) {
-				case "/label":
-					labelCommand(context, args);
-					break;
-				case "/close":
-					closeCommand(context);
-					break;
-				case "/approve":
-					approveCommand(context);
-					break;
-				case "/merge":
-					mergeCommand(context);
-					break;
-				case "/WIP":
-					WIPCommand(context);
-					break;
-
-				default:
-					if (command[0] === "/") {
-						if (!context.isBot) {
-							const params = context.issue();
-
-							context.octokit.reactions.createForIssueComment({
-								owner: params.owner,
-								repo: params.repo,
-								comment_id: commentId,
-								content: "-1",
-							});
-
-							createComment(
-								context,
-								`**${command}** command doesn't exist.
-						     ${availableCommandsMessage}
-						    `
-							);
-						}
-
-						if (context.isBot) {
-							deleteComment(context);
-						}
-					}
-					break;
-			}
+			// context.octokit.reactions.createForIssueComment(params);
+			context.octokit.reactions.createForIssueComment({
+				owner: params.owner,
+				repo: params.repo,
+				comment_id: commentId,
+				content: "rocket",
+			});
 		}
-	);
+
+		switch (command) {
+			case "/label":
+				labelCommand(context, args);
+				break;
+			case "/close":
+				closeCommand(context);
+				break;
+			case "/approve":
+				approveCommand(context);
+				break;
+			case "/merge":
+				mergeCommand(context);
+				break;
+			case "/WIP":
+				WIPCommand(context);
+				break;
+
+			default:
+				if (command[0] === "/") {
+					if (!context.isBot) {
+						const params = context.issue();
+
+						context.octokit.reactions.createForIssueComment({
+							owner: params.owner,
+							repo: params.repo,
+							comment_id: commentId,
+							content: "-1",
+						});
+
+						createComment(
+							context,
+							`**${command}** command doesn't exist.
+						     ${availableCommandsMessage}
+						    `,
+						);
+					}
+
+					if (context.isBot) {
+						deleteComment(context);
+					}
+				}
+				break;
+		}
+	});
 };
