@@ -11,6 +11,8 @@ using `/` commands in your comments to do some nice stuff like approving and mer
 
 ## Features
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/e01156ab13ab4cfd9608be9af5327600)](https://app.codacy.com/gh/shriproperty/repository-commander?utm_source=github.com&utm_medium=referral&utm_content=shriproperty/repository-commander&utm_campaign=Badge_Grade_Settings)
+
 - Automatically add labels to pull requests eg:- `Approved`, `Merged`
 - `/` commands can be used in comments eg:- `/approve`, `/merge`, `/label documentation`
 - Bot will react with `🚀` emoji when a command is found in comment
