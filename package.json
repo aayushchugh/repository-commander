@@ -6,6 +6,7 @@
 	"author": "Ayush Chugh",
 	"license": "ISC",
 	"homepage": "https://github.com//",
+	"packageManager": "pnpm@7.10.0",
 	"keywords": [
 		"probot",
 		"github",
