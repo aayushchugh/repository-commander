@@ -16,6 +16,8 @@ import mergeCommand from "./commands/merge.command";
 import WIPCommand from "./commands/wip.command";
 import { createComment, deleteComment } from "./utils/comment.util";
 import getCommandAndArgs from "./utils/getCommandAndArgs.util";
+import { listIssueLabels } from "./utils/listLabels.util";
+import { removeLabel } from "./utils/label.util";
 
 const availableCommandsMessage = `Available commands are:- 
 						    - **/label** - Add labels to an issue or pull request.
@@ -37,6 +39,15 @@ export = (app: Probot) => {
 
 	app.on("pull_request.closed", addMergedLabel);
 	app.on("pull_request.closed", addCloseLabel);
+	app.on("pull_request.reopened", async (context: Context<"pull_request.reopened">) => {
+		// @ts-ignore
+		const issueLabels = await listIssueLabels(context);
+		const foundClosedLabel = issueLabels.data.find((label) => label.name === ":x: closed");
+
+		if (foundClosedLabel) {
+			await removeLabel(":x: closed", context);
+		}
+	});
 
 	app.on("issues.closed", addLabelToIssueOnClose);
 

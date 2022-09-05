@@ -127,7 +127,10 @@ export async function changesRequestLabel(context: Context) {
 
 export async function addCloseLabel(context: Context<"pull_request.closed">) {
 	try {
+		const params = context.pullRequest();
+		await context.octokit.pulls.checkIfMerged(params);
 	} catch (err) {
+		// @ts-ignore
 		const issueLabels = await listIssueLabels(context);
 		const foundReadyForReviewLabel = issueLabels.data.filter(
 			(label) => label.name === ":mag: Ready for Review",
