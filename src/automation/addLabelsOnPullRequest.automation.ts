@@ -127,7 +127,10 @@ export async function changesRequestLabel(context: Context) {
 
 export async function addCloseLabel(context: Context<"pull_request.closed">) {
 	try {
+		const params = context.pullRequest();
+		await context.octokit.pulls.checkIfMerged(params);
 	} catch (err) {
+		// @ts-ignore
 		const issueLabels = await listIssueLabels(context);
 		const foundReadyForReviewLabel = issueLabels.data.filter(
 			(label) => label.name === ":mag: Ready for Review",
@@ -152,5 +155,15 @@ export async function addCloseLabel(context: Context<"pull_request.closed">) {
 		}
 
 		addLabel([":x: closed"], context, "B60205");
+	}
+}
+
+export async function removeClosedLabel(context: Context<"pull_request.reopened">) {
+	// @ts-ignore
+	const issueLabels = await listIssueLabels(context);
+	const foundClosedLabel = issueLabels.data.find((label) => label.name === ":x: closed");
+
+	if (foundClosedLabel) {
+		await removeLabel(":x: closed", context);
 	}
 }
