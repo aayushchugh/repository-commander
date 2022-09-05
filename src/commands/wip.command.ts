@@ -12,22 +12,22 @@ async function WIPCommand(context: Context<"issue_comment.created">) {
 		(label) => label.name === ":mag: Ready for Review",
 	);
 
-	if (
-		title.includes("WIP") ||
-		title.includes("Work In Progress") ||
-		title.includes("work in progress") ||
-		title.includes(":construction:")
-	) {
-		const params = context.issue({
-			title: `${context.payload.issue.title.replace(":construction:", "")}`,
-		});
-
-		context.octokit.issues.update(params);
-	}
-
 	if (wipLabel) {
 		if (!foundReadyForReviewLabel && context.payload.issue.pull_request) {
 			addLabel([":mag: Ready for Review"], context);
+		}
+
+		if (
+			title.includes("WIP") ||
+			title.includes("Work In Progress") ||
+			title.includes("work in progress") ||
+			title.includes(":construction:")
+		) {
+			const params = context.issue({
+				title: `${context.payload.issue.title.replace(":construction:", "")}`,
+			});
+
+			context.octokit.issues.update(params);
 		}
 
 		removeLabel(":construction: WIP", context);
@@ -39,19 +39,19 @@ async function WIPCommand(context: Context<"issue_comment.created">) {
 		}
 
 		addLabel([":construction: WIP"], context, "383214");
-	}
 
-	if (
-		!title.includes("WIP") ||
-		!title.includes("Work In Progress") ||
-		!title.includes("work in progress") ||
-		!title.includes(":construction:")
-	) {
-		const params = context.issue({
-			title: `:construction: ${context.payload.issue.title}`,
-		});
+		if (
+			!title.includes("WIP") ||
+			!title.includes("Work In Progress") ||
+			!title.includes("work in progress") ||
+			!title.includes(":construction:")
+		) {
+			const params = context.issue({
+				title: `:construction: ${context.payload.issue.title}`,
+			});
 
-		context.octokit.issues.update(params);
+			context.octokit.issues.update(params);
+		}
 	}
 }
 
