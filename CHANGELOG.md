@@ -1,3 +1,16 @@
+# [1.7.0](https://github.com/shriproperty/repository-commander/compare/v1.6.0...v1.7.0) (2022-09-05)
+
+
+### Bug Fixes
+
+* **deps:** pin dependencies ([df2a21c](https://github.com/shriproperty/repository-commander/commit/df2a21c7928744dce8979aaea8b7fa123504e57b))
+* **labels:** :bug: After using /WIP command Ready for Review label is… ([#51](https://github.com/shriproperty/repository-commander/issues/51)) ([c290f4a](https://github.com/shriproperty/repository-commander/commit/c290f4a0ac9765548913042daeee698e36095096)), closes [#42](https://github.com/shriproperty/repository-commander/issues/42)
+
+
+### Features
+
+* **comments:** :sparkles: bot will comment on whose behalf a pr is a… ([#49](https://github.com/shriproperty/repository-commander/issues/49)) ([8452b5e](https://github.com/shriproperty/repository-commander/commit/8452b5ef18e071669f6e72bcff9b4c6d7adfbbb6)), closes [#38](https://github.com/shriproperty/repository-commander/issues/38)
+
 # [1.6.0](https://github.com/shriproperty/bot/compare/v1.5.0...v1.6.0) (2022-08-28)
 
 
