@@ -21,7 +21,8 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: npm install and build
         run: |
-          npm install
+          npm i -g pnpm --force
+          pnpm install --force
         env:
           CI: true
 
@@ -40,7 +41,7 @@ jobs:
           script: |
             cd ~/bot
             git pull origin main
-            yarn install
+            pnpm install --force
             pm2 restart Bot
 
   release:
@@ -52,7 +53,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: "16.x"
-      - run: npm i
+      - run: pnpm install --force
       - run: npx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
