@@ -9,6 +9,8 @@
 A Github app that lets you automate your basic tasks by automatically adding labels to your pull requests and
 using `/` commands in your comments to do some nice stuff like approving and merging pull requests.
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/e01156ab13ab4cfd9608be9af5327600)](https://app.codacy.com/gh/shriproperty/repository-commander?utm_source=github.com&utm_medium=referral&utm_content=shriproperty/repository-commander&utm_campaign=Badge_Grade_Settings)
+
 ## Features
 
 - Automatically add labels to pull requests eg:- `Approved`, `Merged`
