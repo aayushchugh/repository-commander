@@ -157,3 +157,13 @@ export async function addCloseLabel(context: Context<"pull_request.closed">) {
 		addLabel([":x: closed"], context, "B60205");
 	}
 }
+
+export async function removeClosedLabel(context: Context<"pull_request.reopened">) {
+	// @ts-ignore
+	const issueLabels = await listIssueLabels(context);
+	const foundClosedLabel = issueLabels.data.find((label) => label.name === ":x: closed");
+
+	if (foundClosedLabel) {
+		await removeLabel(":x: closed", context);
+	}
+}

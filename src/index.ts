@@ -7,6 +7,7 @@ import {
 	addMergedLabel,
 	changesRequestLabel,
 	addCloseLabel,
+	removeClosedLabel,
 } from "./automation/addLabelsOnPullRequest.automation";
 import addLabelToIssueOnClose from "./automation/addLabelToIssueOnClose.automation";
 import approveCommand from "./commands/approve.command";
@@ -39,15 +40,7 @@ export = (app: Probot) => {
 
 	app.on("pull_request.closed", addMergedLabel);
 	app.on("pull_request.closed", addCloseLabel);
-	app.on("pull_request.reopened", async (context: Context<"pull_request.reopened">) => {
-		// @ts-ignore
-		const issueLabels = await listIssueLabels(context);
-		const foundClosedLabel = issueLabels.data.find((label) => label.name === ":x: closed");
-
-		if (foundClosedLabel) {
-			await removeLabel(":x: closed", context);
-		}
-	});
+	app.on("pull_request.reopened", removeClosedLabel);
 
 	app.on("issues.closed", addLabelToIssueOnClose);
 
