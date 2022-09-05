@@ -10,6 +10,7 @@ A Github app that lets you automate your basic tasks by automatically adding lab
 using `/` commands in your comments to do some nice stuff like approving and merging pull requests.
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/e01156ab13ab4cfd9608be9af5327600)](https://app.codacy.com/gh/shriproperty/repository-commander?utm_source=github.com&utm_medium=referral&utm_content=shriproperty/repository-commander&utm_campaign=Badge_Grade_Settings)
+[![Deploy server](https://github.com/shriproperty/repository-commander/actions/workflows/deploy.yml/badge.svg)](https://github.com/shriproperty/repository-commander/actions/workflows/deploy.yml)
 
 ## Features
 
