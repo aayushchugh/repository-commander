@@ -7,3 +7,5 @@ coverage
 lib
 .yarn
 build
+.pnp.cjs
+.pnp.loader.mjs
