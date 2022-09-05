@@ -14,61 +14,69 @@ using `/` commands in your comments to do some nice stuff like approving and mer
 
 ## Features
 
-- Automatically add labels to pull requests eg:- `Approved`, `Merged`
-- `/` commands can be used in comments eg:- `/approve`, `/merge`, `/label documentation`
-- Bot will react with `🚀` emoji when a command is found in comment
+-   Automatically add labels to pull requests eg:- `Approved`, `Merged`
+-   `/` commands can be used in comments eg:- `/approve`, `/merge`, `/label documentation`
+-   Bot will react with `🚀` emoji when a command is found in comment
+-   When a new issue is created and body is less than 20 characters than bot will ask for more information
+-   After user edits the body and adds the required information bot will remove the `needs more information` label
 
 ## Demo
 
 ### Automatically adding labels
 
-- When a issue is closed by user and it contains some keyword labels than these labels will be automatically added
+-   When a issue is closed by user and it contains some keyword labels than these labels will be automatically added
 
-  - `bug` - `fixed`
-  - `enhancement` - `implemented`
-  - `feature` - `implemented`
+    -   `bug` - `fixed`
+    -   `enhancement` - `implemented`
+    -   `feature` - `implemented`
 
 > If these labels are not present in the repo than bot will create them automatically with random color
 
-- Ready for Review (pull_request)
+-   Ready for Review (pull_request)
 
-  ![Ready for Review](https://user-images.githubusercontent.com/69336518/187087709-33ae28db-8c9e-44a0-a231-45068ea34aef.png)
+    ![Ready for Review](https://user-images.githubusercontent.com/69336518/187087709-33ae28db-8c9e-44a0-a231-45068ea34aef.png)
 
-- Approved (pull_request)
+-   Approved (pull_request)
 
-  ![Approved](https://user-images.githubusercontent.com/69336518/187087871-38086613-059e-459e-954a-10506b5cabd8.gif)
+    ![Approved](https://user-images.githubusercontent.com/69336518/187087871-38086613-059e-459e-954a-10506b5cabd8.gif)
 
-- Merged (pull_request)
+-   Merged (pull_request)
 
-  ![Merged](https://user-images.githubusercontent.com/69336518/187088126-7e59afe9-2cde-4831-8782-25f95837cd81.gif)
+    ![Merged](https://user-images.githubusercontent.com/69336518/187088126-7e59afe9-2cde-4831-8782-25f95837cd81.gif)
+
+### Ask for more information
+
+-   When a new issue is created and body is less than 20 characters than bot will ask for more information
+
+    ![needs more information](https://user-images.githubusercontent.com/69336518/188457969-62d19224-62ef-47ac-80f8-f2e90e1d0ae5.png)
+
+-   After user edits the body and adds the required information bot will remove the `needs more information` label
+
+    ![remove needs more information](https://user-images.githubusercontent.com/69336518/188458497-f6d3fe20-8859-4930-b4bd-1506a566f133.png)
 
 ### `/` command
 
-- `/label <name ...>` (pull_request, issue)
+-   `/label <name ...>` (pull_request, issue)
 
-  ![Label command](https://user-images.githubusercontent.com/69336518/187088515-67693ab6-4949-4a80-8ee2-0a6b2d1d266e.gif)
+    ![Label command](https://user-images.githubusercontent.com/69336518/187088515-67693ab6-4949-4a80-8ee2-0a6b2d1d266e.gif)
 
-- `/approve` (pull_request)
+-   `/approve` (pull_request)
 
-  ![Approve command](https://user-images.githubusercontent.com/69336518/187089239-5acfde34-cefb-47f8-8b8d-a82b84855ce9.gif)
+    ![Approve command](https://user-images.githubusercontent.com/69336518/188456650-0c9a1295-6c87-4d7c-802d-9183bd422c58.gif)
 
-- `/merge` (pull_request)
+-   `/merge` (pull_request)
 
-  Rebase and Merge method will be used to merge the pull request.
+    Rebase and Merge method will be used to merge the pull request.
 
-  ![Merge Command](https://user-images.githubusercontent.com/69336518/187089488-3df12116-eac0-4d3a-8309-f447a333ea3b.gif)
+    ![Merge Command](https://user-images.githubusercontent.com/69336518/188457124-b7299f5e-64a6-4eeb-a719-d81f65b25423.gif)
 
-  You can bypass `/approve` command and execute `/merge` directly this will approve that changes first and than merge
+-   `/WIP` (pull_request, issue)
 
-  ![Merge and Approve together](https://user-images.githubusercontent.com/69336518/187089739-cd20508a-0b3f-4a00-99ce-550f6ccb4609.gif)
+    ![WIP](https://user-images.githubusercontent.com/69336518/187088635-24fe7609-eb40-47de-b1af-72210712d79a.gif)
 
-- `/WIP` (pull_request, issue)
+-   `/close` (pull_request, issue)
 
-  ![WIP](https://user-images.githubusercontent.com/69336518/187088635-24fe7609-eb40-47de-b1af-72210712d79a.gif)
-
-- `/close` (pull_request, issue)
-
-  ![Close command](https://user-images.githubusercontent.com/69336518/187088876-68257a26-01ac-49d5-aa8f-310870874287.gif)
+    ![Close command]((https://user-images.githubusercontent.com/69336518/188459023-9195e332-7aa7-4f84-9bb8-7cc8fb45432b.gif)
 
 ## Contributing
 
@@ -120,4 +128,4 @@ For support, please create a issue or reach out to us at ayushchugh2006@gmail.co
 
 ## Authors
 
-- [@aayushchugh](https://www.github.com/aayushchugh)
+-   [@aayushchugh](https://www.github.com/aayushchugh)
