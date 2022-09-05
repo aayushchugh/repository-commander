@@ -17,8 +17,7 @@ import mergeCommand from "./commands/merge.command";
 import WIPCommand from "./commands/wip.command";
 import { createComment, deleteComment } from "./utils/comment.util";
 import getCommandAndArgs from "./utils/getCommandAndArgs.util";
-import { listIssueLabels } from "./utils/listLabels.util";
-import { removeLabel } from "./utils/label.util";
+import { removeRequestMoreInfoLabel, requestMoreInfo } from "./automation/requestMoreInfo";
 
 const availableCommandsMessage = `Available commands are:- 
 						    - **/label** - Add labels to an issue or pull request.
@@ -34,6 +33,8 @@ const availableCommandsMessage = `Available commands are:-
 export = (app: Probot) => {
 	/* --------------------------------- ANCHOR Automation --------------------------------- */
 	app.on("pull_request.opened", addReadyForReviewLabel);
+	app.on("issues.opened", requestMoreInfo);
+	app.on("issues.edited", removeRequestMoreInfoLabel);
 
 	app.on("pull_request_review.submitted", addApprovedLabel);
 	app.on("pull_request_review.submitted", changesRequestLabel);
