@@ -57,6 +57,9 @@ export async function addMergedLabel(context: Context<"pull_request.closed">) {
 		//@ts-ignore
 		const issueLabels = await listIssueLabels(context);
 
+		const foundReadyForReviewLabel = issueLabels.data.filter(
+			(label) => label.name === ":mag: Ready for Review",
+		);
 		const foundApproveLabel = issueLabels.data.filter(
 			(label) => label.name === ":white_check_mark: Approved",
 		);
@@ -64,7 +67,9 @@ export async function addMergedLabel(context: Context<"pull_request.closed">) {
 			(label) => label.name === ":construction: WIP",
 		);
 
-		addLabel([":sparkles: Merged:"], context);
+		if (foundReadyForReviewLabel.length > 0) {
+			removeLabel(":mag: Ready for Review", context);
+		}
 
 		if (foundApproveLabel.length > 0) {
 			removeLabel(":white_check_mark: Approved", context);
@@ -73,6 +78,8 @@ export async function addMergedLabel(context: Context<"pull_request.closed">) {
 		if (foundWIPLabel.length > 0) {
 			removeLabel(":construction: WIP", context);
 		}
+
+		addLabel([":sparkles: Merged:"], context);
 
 		if (
 			title.includes("WIP") ||
