@@ -1,3 +1,10 @@
+## [1.7.1](https://github.com/shriproperty/repository-commander/compare/v1.7.0...v1.7.1) (2022-09-12)
+
+
+### Bug Fixes
+
+* :bug: remove `Ready for Review` label and than add `merged` label in pull_request ([#66](https://github.com/shriproperty/repository-commander/issues/66)) ([211ca23](https://github.com/shriproperty/repository-commander/commit/211ca237a310795e21177e4c31f7c97a3d40cb15)), closes [#44](https://github.com/shriproperty/repository-commander/issues/44) [#49](https://github.com/shriproperty/repository-commander/issues/49) [#38](https://github.com/shriproperty/repository-commander/issues/38) [#51](https://github.com/shriproperty/repository-commander/issues/51) [#42](https://github.com/shriproperty/repository-commander/issues/42) [#52](https://github.com/shriproperty/repository-commander/issues/52) [#43](https://github.com/shriproperty/repository-commander/issues/43) [#53](https://github.com/shriproperty/repository-commander/issues/53) [#46](https://github.com/shriproperty/repository-commander/issues/46) [#54](https://github.com/shriproperty/repository-commander/issues/54) [#47](https://github.com/shriproperty/repository-commander/issues/47) [#57](https://github.com/shriproperty/repository-commander/issues/57) [#58](https://github.com/shriproperty/repository-commander/issues/58) [#60](https://github.com/shriproperty/repository-commander/issues/60) [#59](https://github.com/shriproperty/repository-commander/issues/59) [#61](https://github.com/shriproperty/repository-commander/issues/61) [#62](https://github.com/shriproperty/repository-commander/issues/62) [#64](https://github.com/shriproperty/repository-commander/issues/64) [#65](https://github.com/shriproperty/repository-commander/issues/65) [#63](https://github.com/shriproperty/repository-commander/issues/63)
+
 # [1.7.0](https://github.com/shriproperty/repository-commander/compare/v1.6.0...v1.7.0) (2022-09-05)
 
 
