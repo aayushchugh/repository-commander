@@ -1,11 +1,11 @@
 import type { Context } from "probot";
-import { addLabel, removeLabel } from "../utils/label.util";
-import { listIssueLabels } from "../utils/listLabels.util";
+import Label from "../utils/label.util";
 
 async function WIPCommand(context: Context<"issue_comment.created">) {
 	const { title } = context.payload.issue;
-	// @ts-ignore
-	const labelsFromIssues = await listIssueLabels(context);
+	const label = new Label(context);
+
+	const labelsFromIssues = await label.listIssueLabels();
 
 	const wipLabel = labelsFromIssues.data.find((label) => label.name === ":construction: WIP");
 	const foundReadyForReviewLabel = labelsFromIssues.data.find(
@@ -14,7 +14,7 @@ async function WIPCommand(context: Context<"issue_comment.created">) {
 
 	if (wipLabel) {
 		if (!foundReadyForReviewLabel && context.payload.issue.pull_request) {
-			addLabel([":mag: Ready for Review"], context);
+			label.add(":mag: Ready for Review");
 		}
 
 		if (
@@ -30,15 +30,15 @@ async function WIPCommand(context: Context<"issue_comment.created">) {
 			context.octokit.issues.update(params);
 		}
 
-		removeLabel(":construction: WIP", context);
+		label.remove(":construction: WIP");
 	}
 
 	if (!wipLabel) {
 		if (foundReadyForReviewLabel) {
-			removeLabel(":mag: Ready for Review", context);
+			label.remove(":mag: Ready for Review");
 		}
 
-		addLabel([":construction: WIP"], context, "383214");
+		label.add(":construction: WIP", "383214");
 
 		if (
 			!title.includes("WIP") ||
