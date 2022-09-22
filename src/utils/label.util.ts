@@ -1,62 +1,143 @@
 import type { Context } from "probot";
 import randomColor from "randomcolor";
-import { listRepoLabels, listIssueLabels } from "./listLabels.util";
 
-/**
- * Add a label to an issue
- * @param {string[]} names - Array of label names to add
- * @param {Context} context Probot context
- * @param {string | undefined} color  Label color
- */
-export async function addLabel(names: string[], context: Context, color?: string) {
-	const labelsFromRepo = await listRepoLabels(context);
-	const labelsFromIssue = await listIssueLabels(context);
+class Label {
+	private context:
+		| Context<"issue_comment.created">
+		| Context<"issues.opened">
+		| Context<"issues.closed">
+		| Context<"issues.edited">
+		| Context<"pull_request.opened">
+		| Context<"pull_request.closed">
+		| Context<"pull_request.reopened">
+		| Context<"pull_request_review.submitted">;
+	private params: ReturnType<
+		| Context<"issue_comment.created">["issue"]
+		| Context<"issues.opened">["issue"]
+		| Context<"issues.closed">["issue"]
+		| Context<"issues.edited">["issue"]
+		| Context<"pull_request.opened">["issue"]
+		| Context<"pull_request.closed">["issue"]
+		| Context<"pull_request.reopened">["issue"]
+		| Context<"pull_request_review.submitted">["issue"]
+	>;
+	private repo: ReturnType<
+		| Context<"issue_comment.created">["repo"]
+		| Context<"issues.opened">["repo"]
+		| Context<"issues.closed">["repo"]
+		| Context<"issues.edited">["repo"]
+		| Context<"pull_request.opened">["repo"]
+		| Context<"pull_request.closed">["repo"]
+		| Context<"pull_request.reopened">["repo"]
+		| Context<"pull_request_review.submitted">["repo"]
+	>;
 
-	names.forEach(async (name) => {
-		const labelFromRepo = labelsFromRepo.data.filter((label) => label.name === name);
+	/**
+	 * @param context Probot context
+	 */
+	constructor(
+		context:
+			| Context<"issue_comment.created">
+			| Context<"issues.opened">
+			| Context<"issues.closed">
+			| Context<"issues.edited">
+			| Context<"pull_request.opened">
+			| Context<"pull_request.closed">
+			| Context<"pull_request.reopened">
+			| Context<"pull_request_review.submitted">,
+	) {
+		this.context = context;
+		this.repo = context.repo();
+		this.params = context.issue();
+	}
 
-		const labelFromIssue = labelsFromIssue.data.filter((label) => label.name === name);
+	/**
+	 * List all the labels in repository
+	 */
+	public async listRepoLabels() {
+		return await this.context.octokit.issues.listLabelsForRepo(this.repo);
+	}
 
-		if (labelFromRepo.length === 0) {
-			if (color) createLabel(name, context, color);
-			else createLabel(name, context);
+	/**
+	 * List all the labels on current issue
+	 */
+	public async listIssueLabels() {
+		return await this.context.octokit.issues.listLabelsOnIssue(this.params);
+	}
+
+	/**
+	 * Create a new label for repo
+	 * @param name name of the label to be created
+	 * @param color Which color should be used for the label if color is not passed than random color will be used
+	 */
+	private async create(name: string, color?: string) {
+		return await this.context.octokit.issues.createLabel({
+			...this.repo,
+			name,
+			color: color || randomColor().split("#")[1],
+		});
+	}
+
+	/**
+	 * Add a Label to an issue or pull request
+	 * @param names  Array of label names to add
+	 * @param color color for the label if color is not passed than random color will be used
+	 */
+	public async add(name: string | string[], color?: string) {
+		const repoLabels = await this.listRepoLabels();
+		const issueLabels = await this.listIssueLabels();
+
+		if (typeof name === "string") {
+			const labelFromRepo = repoLabels.data.find((label) => label.name === name);
+			const labelFromIssue = issueLabels.data.find((label) => label.name === name);
+
+			if (!labelFromRepo) {
+				this.create(name, color);
+			}
+
+			if (!labelFromIssue) {
+				await this.context.octokit.issues.addLabels({
+					...this.params,
+					labels: [name],
+				});
+			}
 		}
 
-		if (labelFromIssue.length === 0) {
-			const newLabels = context.issue({
-				labels: names,
+		if (Array.isArray(name)) {
+			name.forEach(async (title) => {
+				const labelFromRepo = repoLabels.data.find((label) => label.name === title);
+				const labelFromIssue = issueLabels.data.find((label) => label.name === title);
+
+				if (!labelFromRepo) {
+					this.create(title, color);
+				}
+
+				if (!labelFromIssue) {
+					await this.context.octokit.issues.addLabels({
+						...this.params,
+						labels: name,
+					});
+				}
 			});
-
-			await context.octokit.issues.addLabels(newLabels);
 		}
-	});
+	}
+
+	/**
+	 * Removes a label from current issue or pull request
+	 * @param name name of the label to be removed
+	 */
+	public async remove(name: string) {
+		const issueLabels = await this.listIssueLabels();
+
+		const labelFromIssue = issueLabels.data.find((label) => label.name === name);
+
+		if (labelFromIssue) {
+			await this.context.octokit.issues.removeLabel({
+				...this.params,
+				name,
+			});
+		}
+	}
 }
 
-/**
- * Create a label
- * @param {string} name - Label name
- * @param {Context} context Probot context
- * @param {string} color - Label color
- */
-// @ts-ignore
-export async function createLabel(name: string, context: Context, color?: string) {
-	const params = context.repo();
-
-	return await context.octokit.issues.createLabel({
-		owner: params.owner,
-		repo: params.repo,
-		name: name,
-		color: color || randomColor().split("#")[1],
-	});
-}
-
-/**
- * Remove Label
- * @param {string} name - Label name
- * @param {Context} context Probot context
- */
-export async function removeLabel(name: string, context: Context) {
-	const issue = context.issue({ name });
-
-	return await context.octokit.issues.removeLabel(issue);
-}
+export default Label;

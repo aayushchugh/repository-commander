@@ -15,9 +15,12 @@ import closeCommand from "./commands/close.command";
 import labelCommand from "./commands/label.command";
 import mergeCommand from "./commands/merge.command";
 import WIPCommand from "./commands/wip.command";
-import { createComment, deleteComment } from "./utils/comment.util";
+import Comment from "./utils/comment.util";
 import getCommandAndArgs from "./utils/getCommandAndArgs.util";
-import { removeRequestMoreInfoLabel, requestMoreInfo } from "./automation/requestMoreInfo";
+import {
+	removeRequestMoreInfoLabel,
+	requestMoreInfo,
+} from "./automation/requestMoreInfo.automation";
 
 const availableCommandsMessage = `Available commands are:- 
 						    - **/label** - Add labels to an issue or pull request.
@@ -50,6 +53,8 @@ export = (app: Probot) => {
 		const { body } = context.payload.comment;
 		const { command, args } = getCommandAndArgs(body);
 		const commentId = context.payload.comment.id;
+
+		const comment = new Comment(context);
 
 		if (command[0] === "/" && !context.isBot) {
 			const params = context.issue();
@@ -92,16 +97,13 @@ export = (app: Probot) => {
 							content: "-1",
 						});
 
-						createComment(
-							context,
-							`**${command}** command doesn't exist.
+						comment.create(`**${command}** command doesn't exist.
 						     ${availableCommandsMessage}
-						    `,
-						);
+						    `);
 					}
 
 					if (context.isBot) {
-						deleteComment(context);
+						comment.delete();
 					}
 				}
 				break;

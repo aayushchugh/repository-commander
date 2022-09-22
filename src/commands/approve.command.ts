@@ -1,12 +1,12 @@
 import type { Context } from "probot";
-import { createComment } from "../utils/comment.util";
+import Comment from "../utils/comment.util";
 
 async function approveCommand(context: Context<"issue_comment.created">) {
 	const pullParams = context.pullRequest();
+	const comment = new Comment(context);
 
 	// @ts-ignore
-	createComment(
-		context,
+	comment.create(
 		`Approving changes of this pull_request as requested by @${context.payload.comment.user.login}`,
 	);
 

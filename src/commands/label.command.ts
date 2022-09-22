@@ -1,5 +1,4 @@
-import { removeLabel, addLabel } from "../utils/label.util";
-import { listIssueLabels } from "../utils/listLabels.util";
+import Label from "../utils/label.util";
 import type { Context } from "probot";
 
 /**
@@ -9,23 +8,22 @@ import type { Context } from "probot";
  * @param {*} args  Arguments passed to the command
  */
 async function labelCommand(context: Context<"issue_comment.created">, args: string[]) {
-	const labelsFromIssue = await listIssueLabels(context);
 	const labelsToAdd: string[] = [];
+	const label = new Label(context);
+	const labelsFromIssue = await label.listIssueLabels();
 
-	args.forEach((label) => {
-		const foundIssueLabel = labelsFromIssue.data.find(
-			(issueLabel) => issueLabel.name === label,
-		);
+	args.forEach((name) => {
+		const foundIssueLabel = labelsFromIssue.data.find((issueLabel) => issueLabel.name === name);
 
 		if (foundIssueLabel) {
-			removeLabel(label, context);
+			label.remove(name);
 		} else {
-			labelsToAdd.push(label);
+			labelsToAdd.push(name);
 		}
 	});
 
 	if (labelsToAdd.length > 0) {
-		addLabel(labelsToAdd, context);
+		label.add(labelsToAdd);
 	}
 }
 

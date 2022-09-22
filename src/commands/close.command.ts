@@ -1,14 +1,11 @@
 import type { Context } from "probot";
-import { createComment } from "../utils/comment.util";
+import Comment from "../utils/comment.util";
 
 function closeCommand(context: Context<"issue_comment.created">) {
 	const params = context.issue();
+	const comment = new Comment(context);
 
-	// @ts-ignore
-	createComment(
-		context,
-		`Closing this issue as requested by @${context.payload.comment.user.login}`,
-	);
+	comment.create(`Closing this issue as requested by @${context.payload.comment.user.login}`);
 
 	context.octokit.issues.update({
 		owner: params.owner,
