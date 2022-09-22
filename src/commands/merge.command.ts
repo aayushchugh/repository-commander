@@ -1,17 +1,18 @@
 import type { Context } from "probot";
-import { createComment } from "../utils/comment.util";
+import Comment from "../utils/comment.util";
 
 async function mergeCommand(context: Context<"issue_comment.created">) {
 	const params = context.pullRequest();
 	const pullRequest = await context.octokit.pulls.get(params);
 
+	const comment = new Comment(context);
+
 	if (!pullRequest.data.mergeable) {
 		// @ts-ignore
-		return createComment(context, ":warning: Pull request is not mergeable.");
+		return comment.create(":warning: Pull request is not mergeable.");
 	}
 
-	createComment(
-		context,
+	comment.create(
 		`Merging this pull_request as requested by @${context.payload.comment.user.login}`,
 	);
 
