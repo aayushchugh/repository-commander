@@ -27,7 +27,7 @@
 	"dependencies": {
 		"@types/node": "18.7.15",
 		"@types/randomcolor": "0.5.6",
-		"body-parser": "1.20.0",
+		"body-parser": "1.20.1",
 		"bottleneck": "2.19.5",
 		"probot": "12.2.8",
 		"randomcolor": "0.6.2"
