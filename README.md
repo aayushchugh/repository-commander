@@ -9,8 +9,9 @@
 A Github app that lets you automate your basic tasks by automatically adding labels to your pull requests and
 using `/` commands in your comments to do some nice stuff like approving and merging pull requests.
 
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/e01156ab13ab4cfd9608be9af5327600)](https://app.codacy.com/gh/shriproperty/repository-commander?utm_source=github.com&utm_medium=referral&utm_content=shriproperty/repository-commander&utm_campaign=Badge_Grade_Settings)
-[![Deploy server](https://github.com/shriproperty/repository-commander/actions/workflows/deploy.yml/badge.svg)](https://github.com/shriproperty/repository-commander/actions/workflows/deploy.yml)
+## :warning:
+
+This repository is archived because the webhook service that is used by this app is not working anymore. If you want to use this app then you can host the webhook server on your own and use this app.
 
 ## Features
 
@@ -86,18 +87,18 @@ For more, check out the [Contributing Guide](CONTRIBUTING.md).
 
 ## Run Locally
 
-You need to clone the [server](https://github.com/shriproperty/server) first and start it
+You need to clone the [repository-commander](https://github.com/aayushchugh/repository-commander) first and start it
 
 Clone the project
 
 ```bash
-  git clone git@github.com:shriproperty/bot.git
+  git clone git@github.com:aayushchugh/repository-commander.git
 ```
 
 Go to the project directory
 
 ```bash
-  cd bot
+  cd repository-commander
 ```
 
 Install dependencies
@@ -116,16 +117,8 @@ For further assistance checkout probot [docs](https://probot.github.io/docs/READ
 
 ## Feedback
 
-If you have any feedback, please create a issue or reach out to us at ayushchugh2006@gmail.com, info@shriproperty.com
+If you have any feedback, please create a issue or reach out to me at `hey@ayushchugh.com`
 
 ## Support
 
-For support, please create a issue or reach out to us at ayushchugh2006@gmail.com, info@shriproperty.com
-
-## License
-
-[ISC](LICENSE) © 2022 Ayush Chugh
-
-## Authors
-
--   [@aayushchugh](https://www.github.com/aayushchugh)
+For support, please create a issue or reach out to me at `hey@ayushchugh.com`

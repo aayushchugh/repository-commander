@@ -1,10 +1,10 @@
 {
 	"name": "repository-commander",
-	"version": "1.7.1",
-	"private": true,
+	"version": "1.0.0",
+	"private": false,
 	"description": "Bot for automating all of your work",
 	"author": "Ayush Chugh",
-	"license": "ISC",
+	"license": "MIT",
 	"homepage": "https://github.com//",
 	"keywords": [
 		"probot",
