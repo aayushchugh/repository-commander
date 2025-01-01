@@ -26,7 +26,9 @@
 	},
 	"dependencies": {
 		"probot": "^13.1.2",
-		"randomcolor": "^0.6.2"
+		"randomcolor": "^0.6.2",
+		"typescript": "^5.3.3",
+		"smee-client": "^2.0.0"
 	},
 	"devDependencies": {
 		"@types/jest": "^29.5.12",
@@ -47,9 +49,7 @@
 		"nodemon": "^3.1.0",
 		"prettier": "^3.2.5",
 		"semantic-release": "^23.0.2",
-		"smee-client": "^2.0.0",
-		"ts-jest": "^29.1.2",
-		"typescript": "^5.3.3"
+		"ts-jest": "^29.1.2"
 	},
 	"engines": {
 		"node": ">= 10.13.0"
