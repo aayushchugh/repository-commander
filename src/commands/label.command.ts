@@ -30,10 +30,10 @@ export async function handleLabelCommand(
 		}
 
 		await addLabel(context, args);
-		await createComment(
-			context,
-			`Added ${args.length > 1 ? "labels" : "label"} as requested by @${context.payload.comment.user.login}`,
-		);
+		// await createComment(
+		// 	context,
+		// 	`Added ${args.length > 1 ? "labels" : "label"} as requested by @${context.payload.comment.user.login}`,
+		// );
 	} catch (error) {
 		console.error("Error in handleLabelCommand:", error);
 		await createComment(context, "An error occurred while adding labels.");
