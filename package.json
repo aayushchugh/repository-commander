@@ -2,10 +2,10 @@
 	"name": "repo-command",
 	"version": "1.0.0",
 	"private": false,
-	"description": "Bot for automating all of your work",
+	"description": "A GitHub bot for automating repository management tasks through commands and automations",
 	"author": "Ayush Chugh",
 	"license": "MIT",
-	"homepage": "https://github.com//",
+	"homepage": "https://github.com/aayushchugh/repo-command",
 	"keywords": [
 		"probot",
 		"github",

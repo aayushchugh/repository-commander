@@ -1,136 +1,79 @@
-# This is a GitHub App Manifest. These settings will be used by default when
-# initially configuring your GitHub App.
-#
-# NOTE: changing this file will not update your GitHub App settings.
-# You must visit github.com/settings/apps/your-app-name to edit them.
-#
-# write more about configuring your GitHub App:
-# https://probot.github.io/docs/development/#configuring-a-github-app
-#
-# write more about GitHub App Manifests:
-# https://developer.github.com/apps/building-github-apps/creating-github-apps-from-a-manifest/
+# The ID of your GitHub App
+id: $APP_ID
+webhook_secret: $WEBHOOK_SECRET
+private_key: $PRIVATE_KEY
 
-# The list of events the GitHub App subscribes to.
-# Uncomment the event names below to enable them.
+# Set to true if your GitHub App was installed on a GitHub Enterprise instance
+enterprise: false
+
+# Array of webhook event names that your GitHub App subscribes to
 default_events:
-  - check_run
-  - check_suite
-  - commit_comment
-  - create
-  - delete
-  - deployment
-  - deployment_status
-  - fork
-  - gollum
-  - issue_comment
-  - issues
-  - label
-  - milestone
-  - member
-  - membership
-  - org_block
-  - organization
-  - page_build
-  - project
-  - project_card
-  - project_column
-  - public
-  - pull_request
-  - pull_request_review
-  - pull_request_review_comment
-  - push
-  - release
-  - repository
-  - status
-  - team
-  - team_add
-  - watch
+    - issue_comment
+    - issues
+    - pull_request
+    - pull_request_review
 
-# The set of permissions needed by the GitHub App. The format of the object uses
-# the permission name for the key (for example, issues) and the access type for
-# the value (for example, write).
-# Valid values are `write`, `write`, and `none`
+# The permissions your app needs
 default_permissions:
-  # Repository creation, deletion, settings, teams, and collaborators.
-  # https://developer.github.com/v3/apps/permissions/#permission-on-administration
-  administration: write
+    # Repository contents, commits, branches, downloads, releases, and merges
+    contents: write # Required for merging PRs
 
-  # Checks on code.
-  # https://developer.github.com/v3/apps/permissions/#permission-on-checks
-  checks: write
+    # Issues and related comments, assignees, labels, and milestones
+    issues: write # Required for managing labels and comments
 
-  # Repository contents, commits, branches, downloads, releases, and merges.
-  # https://developer.github.com/v3/apps/permissions/#permission-on-contents
-  contents: write
+    # Pull requests and related comments, assignees, labels, milestones, and merges
+    pull_requests: write # Required for managing PRs and reviews
 
-  # Deployments and deployment statuses.
-  # https://developer.github.com/v3/apps/permissions/#permission-on-deployments
-  deployments: write
+    # Organization members and teams
+    members: read # Required for checking org membership in welcome automation
 
-  # Issues and related comments, assignees, labels, and milestones.
-  # https://developer.github.com/v3/apps/permissions/#permission-on-issues
-  issues: write
+    # Repository metadata
+    metadata: read # Required for basic repo info
 
-  # Search repositories, list collaborators, and access repository metadata.
-  # https://developer.github.com/v3/apps/permissions/#metadata-permissions
-  metadata: write
+    # Checks on code
+    checks: read # Required for checking status before merge
 
-  # Retrieve Pages statuses, configuration, and builds, as well as create new builds.
-  # https://developer.github.com/v3/apps/permissions/#permission-on-pages
-  pages: write
+    # Repository administration
+    administration: none
 
-  # Pull requests and related comments, assignees, labels, milestones, and merges.
-  # https://developer.github.com/v3/apps/permissions/#permission-on-pull-requests
-  pull_requests: write
+    # Blocking and unblocking users
+    blocking: none
 
-  # Manage the post-receive hooks for a repository.
-  # https://developer.github.com/v3/apps/permissions/#permission-on-repository-hooks
-  repository_hooks: write
+    # Deployments and deployment statuses
+    deployments: none
 
-  # Manage repository projects, columns, and cards.
-  # https://developer.github.com/v3/apps/permissions/#permission-on-repository-projects
-  repository_projects: write
+    # Repository packages
+    packages: none
 
-  # Retrieve security vulnerability alerts.
-  # https://developer.github.com/v4/object/repositoryvulnerabilityalert/
-  vulnerability_alerts: write
+    # Repository pages
+    pages: none
 
-  # Commit statuses.
-  # https://developer.github.com/v3/apps/permissions/#permission-on-statuses
-  statuses: write
+    # Repository projects
+    projects: none
 
-  # Organization members and teams.
-  # https://developer.github.com/v3/apps/permissions/#permission-on-members
-  members: write
+    # Security alerts
+    security_events: none
 
-  # View and manage users blocked by the organization.
-  # https://developer.github.com/v3/apps/permissions/#permission-on-organization-user-blocking
-  organization_user_blocking: write
+    # Repository starring
+    starring: none
 
-  # Manage organization projects, columns, and cards.
-  # https://developer.github.com/v3/apps/permissions/#permission-on-organization-projects
-  organization_projects: write
+    # Repository statuses
+    statuses: none
 
-  # Manage team discussions and related comments.
-  # https://developer.github.com/v3/apps/permissions/#permission-on-team-discussions
-  team_discussions: write
+    # Team discussions
+    team_discussions: none
 
-  # Manage the post-receive hooks for an organization.
-  # https://developer.github.com/v3/apps/permissions/#permission-on-organization-hooks
-  organization_hooks: write
+    # Workflows, workflow runs, and workflow dispatch
+    workflows: none
 
-  # Get notified of, and update, content references.
-  # https://developer.github.com/v3/apps/permissions/
-  organization_administration: write
 # The name of the GitHub App. Defaults to the name specified in package.json
-# name: My Probot App
+name: Repo Command
 
-# The homepage of your GitHub App.
-# url: https://example.com/
+# The homepage of your GitHub App
+url: https://github.com/aayushchugh/repo-command
 
-# A description of the GitHub App.
-# description: A description of my awesome app
+# A description of the GitHub App
+description: A GitHub bot for automating repository management tasks through commands and automations.
 
-# Set to true when your GitHub App is available to the public or false when it is only accessible to the owner of the app.
-# Default: true
-# public: false
+# Set to true when your GitHub App is available to the public or false when it is only accessible to the owner of the app
+public: true
