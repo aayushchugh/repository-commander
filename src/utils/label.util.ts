@@ -54,14 +54,18 @@ class Label {
 	/**
 	 * List all the labels in repository
 	 */
-	public async listRepoLabels() {
+	public async listRepoLabels(): Promise<
+		Awaited<ReturnType<typeof this.context.octokit.issues.listLabelsForRepo>>
+	> {
 		return await this.context.octokit.issues.listLabelsForRepo(this.repo);
 	}
 
 	/**
 	 * List all the labels on current issue
 	 */
-	public async listIssueLabels() {
+	public async listIssueLabels(): Promise<
+		Awaited<ReturnType<typeof this.context.octokit.issues.listLabelsOnIssue>>
+	> {
 		return await this.context.octokit.issues.listLabelsOnIssue(this.params);
 	}
 

@@ -9,10 +9,6 @@
 A Github app that lets you automate your basic tasks by automatically adding labels to your pull requests and
 using `/` commands in your comments to do some nice stuff like approving and merging pull requests.
 
-## :warning:
-
-This repository is archived because the webhook service that is used by this app is not working anymore. If you want to use this app then you can host the webhook server on your own and use this app.
-
 ## Features
 
 -   Automatically add labels to pull requests eg:- `Approved`, `Merged`

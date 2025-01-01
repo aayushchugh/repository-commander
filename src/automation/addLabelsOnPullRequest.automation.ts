@@ -5,7 +5,7 @@ import Label from "../utils/label.util";
 export async function addReadyForReviewLabel(context: Context<"pull_request.opened">) {
 	const label = new Label(context);
 
-	label.add(":mag: Ready for Review");
+	label.add("Ready for Review");
 }
 
 export async function addApprovedLabel(context: Context<"pull_request_review.submitted">) {
@@ -14,11 +14,9 @@ export async function addApprovedLabel(context: Context<"pull_request_review.sub
 	const issueLabels = await label.listIssueLabels();
 
 	const reviews = await context.octokit.pulls.listReviews(params);
-	const approvedLabel = issueLabels.data.filter(
-		(label) => label.name === ":white_check_mark: Approved",
-	);
+	const approvedLabel = issueLabels.data.filter((label) => label.name === "Approved");
 	const changesRequestedLabel = issueLabels.data.filter(
-		(label) => label.name === ":warning: Changes requested",
+		(label) => label.name === "Changes requested",
 	);
 
 	const approvedReviews = reviews.data.filter((review) => review.state === "APPROVED");
@@ -29,26 +27,26 @@ export async function addApprovedLabel(context: Context<"pull_request_review.sub
 
 	if (foundChangesRequestedReview.length === 0 && changesRequestedLabel.length > 0) {
 		// @ts-ignore
-		label.remove(":warning: Changes requested");
+		label.remove("Changes requested");
 	}
 
 	if (approvedReviews.length === 0 && approvedLabel.length > 0) {
-		label.remove(":white_check_mark: Approved");
+		label.remove("Approved");
 	}
 
 	if (approvedReviews.length > 0) {
 		const issueLabels = await label.listIssueLabels();
 
 		const foundReviewLabel = issueLabels.data.filter(
-			(label) => label.name === ":mag: Ready for Review",
+			(label) => label.name === "Ready for Review",
 		);
 
 		if (approvedLabel.length === 0) {
-			label.add(":white_check_mark: Approved");
+			label.add("Approved");
 		}
 
 		if (foundReviewLabel.length > 0) {
-			label.remove(":mag: Ready for Review");
+			label.remove("Ready for Review");
 		}
 	}
 }
@@ -61,21 +59,19 @@ export async function addMergedLabel(context: Context<"pull_request.closed">) {
 		const issueLabels = await label.listIssueLabels();
 
 		const foundReadyForReviewLabel = issueLabels.data.filter(
-			(label) => label.name === ":mag: Ready for Review",
+			(label) => label.name === "Ready for Review",
 		);
-		const foundApproveLabel = issueLabels.data.filter(
-			(label) => label.name === ":white_check_mark: Approved",
-		);
+		const foundApproveLabel = issueLabels.data.filter((label) => label.name === "Approved");
 		const foundWIPLabel = issueLabels.data.filter(
 			(label) => label.name === ":construction: WIP",
 		);
 
 		if (foundReadyForReviewLabel.length > 0) {
-			label.remove(":mag: Ready for Review");
+			label.remove("Ready for Review");
 		}
 
 		if (foundApproveLabel.length > 0) {
-			label.remove(":white_check_mark: Approved");
+			label.remove("Approved");
 		}
 
 		if (foundWIPLabel.length > 0) {
@@ -112,27 +108,25 @@ export async function changesRequestLabel(context: Context<"pull_request_review.
 	);
 
 	const foundChangedRequestedLabel = issueLabels.data.filter(
-		(label) => label.name === ":warning: Changes requested",
+		(label) => label.name === "Changes requested",
 	);
 
 	const foundReadyForReviewLabel = issueLabels.data.filter(
-		(label) => label.name === ":mag: Ready for Review",
+		(label) => label.name === "Ready for Review",
 	);
 
-	const foundApprovedLabel = issueLabels.data.filter(
-		(label) => label.name === ":white_check_mark: Approved",
-	);
+	const foundApprovedLabel = issueLabels.data.filter((label) => label.name === "Approved");
 
 	if (changesRequestedReviews.length > 0 && foundChangedRequestedLabel.length === 0) {
-		label.add(":warning: Changes requested", "AA2626");
+		label.add("Changes requested", "AA2626");
 	}
 
 	if (changesRequestedReviews.length > 0 && foundReadyForReviewLabel.length > 0) {
-		label.remove(":mag: Ready for Review");
+		label.remove("Ready for Review");
 	}
 
 	if (changesRequestedReviews.length > 0 && foundApprovedLabel.length > 0) {
-		label.remove(":white_check_mark: Approved");
+		label.remove("Approved");
 	}
 }
 
@@ -145,28 +139,26 @@ export async function addCloseLabel(context: Context<"pull_request.closed">) {
 
 		const issueLabels = await label.listIssueLabels();
 		const foundReadyForReviewLabel = issueLabels.data.filter(
-			(label) => label.name === ":mag: Ready for Review",
+			(label) => label.name === "Ready for Review",
 		);
-		const foundApprovedLabel = issueLabels.data.filter(
-			(label) => label.name === ":white_check_mark: Approved",
-		);
+		const foundApprovedLabel = issueLabels.data.filter((label) => label.name === "Approved");
 		const foundChangesRequestedLabel = issueLabels.data.filter(
-			(label) => label.name === ":warning: Changes requested",
+			(label) => label.name === "Changes requested",
 		);
 
 		if (foundReadyForReviewLabel.length > 0) {
-			label.remove(":mag: Ready for Review");
+			label.remove("Ready for Review");
 		}
 
 		if (foundApprovedLabel.length > 0) {
-			label.remove(":white_check_mark: Approved");
+			label.remove("Approved");
 		}
 
 		if (foundChangesRequestedLabel.length > 0) {
-			label.remove(":warning: Changes requested");
+			label.remove("Changes requested");
 		}
 
-		label.add(":x: closed", "B60205");
+		label.add("closed", "B60205");
 	}
 }
 
@@ -174,9 +166,9 @@ export async function removeClosedLabel(context: Context<"pull_request.reopened"
 	const label = new Label(context);
 
 	const issueLabels = await label.listIssueLabels();
-	const foundClosedLabel = issueLabels.data.find((label) => label.name === ":x: closed");
+	const foundClosedLabel = issueLabels.data.find((label) => label.name === "closed");
 
 	if (foundClosedLabel) {
-		label.remove(":x: closed");
+		label.remove("closed");
 	}
 }

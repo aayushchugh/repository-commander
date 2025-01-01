@@ -7,6 +7,13 @@ async function mergeCommand(context: Context<"issue_comment.created">) {
 
 	const comment = new Comment(context);
 
+	// Check if the comment is on a pull request
+	if (!context.payload.issue.pull_request) {
+		const comment = new Comment(context);
+		comment.create("This command can only be used on pull requests.");
+		return;
+	}
+
 	if (!pullRequest.data.mergeable) {
 		// @ts-ignore
 		return comment.create(":warning: Pull request is not mergeable.");

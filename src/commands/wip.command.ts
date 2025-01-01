@@ -7,14 +7,14 @@ async function WIPCommand(context: Context<"issue_comment.created">) {
 
 	const labelsFromIssues = await label.listIssueLabels();
 
-	const wipLabel = labelsFromIssues.data.find((label) => label.name === ":construction: WIP");
+	const wipLabel = labelsFromIssues.data.find((label) => label.name === "WIP");
 	const foundReadyForReviewLabel = labelsFromIssues.data.find(
-		(label) => label.name === ":mag: Ready for Review",
+		(label) => label.name === "Ready for Review",
 	);
 
 	if (wipLabel) {
 		if (!foundReadyForReviewLabel && context.payload.issue.pull_request) {
-			label.add(":mag: Ready for Review");
+			label.add("Ready for Review");
 		}
 
 		if (
@@ -30,15 +30,15 @@ async function WIPCommand(context: Context<"issue_comment.created">) {
 			context.octokit.issues.update(params);
 		}
 
-		label.remove(":construction: WIP");
+		label.remove("WIP");
 	}
 
 	if (!wipLabel) {
 		if (foundReadyForReviewLabel) {
-			label.remove(":mag: Ready for Review");
+			label.remove("Ready for Review");
 		}
 
-		label.add(":construction: WIP", "383214");
+		label.add("WIP", "383214");
 
 		if (
 			!title.includes("WIP") ||
