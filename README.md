@@ -25,13 +25,7 @@ A GitHub bot that automates repository management through commands and automatic
 Use these commands in PR/issue comments:
 
 - `/approve` - Approve a pull request
-
-https://github.com/user-attachments/assets/d6797ffc-1f56-4363-a8cc-048f10f4a9b5
-
 - `/merge` - Merge a pull request
-
-https://github.com/user-attachments/assets/6a39d511-edd1-4a93-92fb-7a3cf486255d
-
 - `/close` - Close an issue or pull request
 - `/wip` - Mark as work in progress
 - `/label <name>` - Add labels
@@ -62,7 +56,9 @@ https://github.com/user-attachments/assets/6a39d511-edd1-4a93-92fb-7a3cf486255d
 
     Approves the pull request (requires write access)
 
-2. **Merge PR**
+   https://github.com/user-attachments/assets/d6797ffc-1f56-4363-a8cc-048f10f4a9b5
+
+3. **Merge PR**
 
     ```
     /merge
@@ -70,7 +66,9 @@ https://github.com/user-attachments/assets/6a39d511-edd1-4a93-92fb-7a3cf486255d
 
     Merges the pull request using rebase strategy (requires write access)
 
-3. **Add Labels**
+   https://github.com/user-attachments/assets/6a39d511-edd1-4a93-92fb-7a3cf486255d
+
+5. **Add Labels**
 
     ```
     /label bug documentation
@@ -78,7 +76,7 @@ https://github.com/user-attachments/assets/6a39d511-edd1-4a93-92fb-7a3cf486255d
 
     Adds one or more labels to the issue/PR
 
-4. **Work in Progress**
+6. **Work in Progress**
 
     ```
     /wip
@@ -86,7 +84,7 @@ https://github.com/user-attachments/assets/6a39d511-edd1-4a93-92fb-7a3cf486255d
 
     Marks PR as work in progress
 
-5. **Request Information**
+7. **Request Information**
     ```
     /request-info
     ```
