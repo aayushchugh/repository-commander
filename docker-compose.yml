@@ -3,7 +3,7 @@ version: "3.8"
 services:
     repository_commander_server:
         build: .
-        container_name: repository-commander
+        container_name: repo-command
         restart: unless-stopped
         environment:
             - NODE_ENV=production

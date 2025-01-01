@@ -1,5 +1,5 @@
 {
-	"name": "repository-commander",
+	"name": "repo-command",
 	"version": "1.0.0",
 	"private": false,
 	"description": "Bot for automating all of your work",
@@ -11,7 +11,7 @@
 		"github",
 		"probot-app",
 		"repocommander",
-		"repository-commander",
+		"repo-command",
 		"automation",
 		"bot",
 		"automation bot",

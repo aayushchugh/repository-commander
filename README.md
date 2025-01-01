@@ -2,7 +2,7 @@
 
 <img src="./logo.svg" height="200" width="200" alt="logo" align="center"/>
 <h1>
- Repository Commander
+ Repo Command
 </h1>
 </div>
 
@@ -130,7 +130,7 @@ Each automation can be enabled or disabled independently through the configurati
 
 ## Configuration
 
-Create a `.github/repository-commander.yml` file in your repository to customize the bot's behavior:
+Create a `.github/repo-command.yml` file in your repository to customize the bot's behavior:
 
 ```yml
 # Minimum length required for issue/PR descriptions
@@ -250,18 +250,18 @@ For more, check out the [Contributing Guide](CONTRIBUTING.md).
 
 ## Run Locally
 
-You need to clone the [repository-commander](https://github.com/aayushchugh/repository-commander) first and start it
+You need to clone the [repo-command](https://github.com/aayushchugh/repo-command) first and start it
 
 Clone the project
 
 ```bash
-  git clone git@github.com:aayushchugh/repository-commander.git
+  git clone git@github.com:aayushchugh/repo-command.git
 ```
 
 Go to the project directory
 
 ```bash
-  cd repository-commander
+  cd repo-command
 ```
 
 Install dependencies
@@ -314,14 +314,14 @@ docker compose up dev
 
 ```bash
 # Build the image
-docker build -t repository-commander .
+docker build -t repo-command .
 
 # Run the container
 docker run -d \
   -p 3000:3000 \
   --env-file .env \
-  --name repository-commander \
-  repository-commander
+  --name repo-command \
+  repo-command
 ```
 
 The bot will be available at `http://localhost:3000`.
