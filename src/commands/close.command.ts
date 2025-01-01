@@ -1,18 +1,14 @@
 import type { Context } from "probot";
-import Comment from "../utils/comment.util";
+import { createComment } from "../utils/comment.util";
 
-function closeCommand(context: Context<"issue_comment.created">) {
-	const params = context.issue();
-	const comment = new Comment(context);
+export async function handleCloseCommand(context: Context<"issue_comment">) {
+	await createComment(
+		context,
+		`Closing this issue as requested by @${context.payload.comment.user.login}`,
+	);
 
-	comment.create(`Closing this issue as requested by @${context.payload.comment.user.login}`);
-
-	context.octokit.issues.update({
-		owner: params.owner,
-		repo: params.repo,
-		issue_number: params.issue_number,
+	await context.octokit.issues.update({
+		...context.issue(),
 		state: "closed",
 	});
 }
-
-export default closeCommand;

@@ -1,11 +1,9 @@
 import type { Context } from "probot";
-import Label from "../utils/label.util";
+import { addLabel, removeLabel, listLabelsOnIssue } from "../utils/label.util";
 
-async function WIPCommand(context: Context<"issue_comment.created">) {
+export async function handleWIPCommand(context: Context<"issue_comment.created">) {
 	const { title } = context.payload.issue;
-	const label = new Label(context);
-
-	const labelsFromIssues = await label.listIssueLabels();
+	const labelsFromIssues = await listLabelsOnIssue(context);
 
 	const wipLabel = labelsFromIssues.data.find((label) => label.name === "WIP");
 	const foundReadyForReviewLabel = labelsFromIssues.data.find(
@@ -14,7 +12,7 @@ async function WIPCommand(context: Context<"issue_comment.created">) {
 
 	if (wipLabel) {
 		if (!foundReadyForReviewLabel && context.payload.issue.pull_request) {
-			label.add("Ready for Review");
+			await addLabel(context, "Ready for Review");
 		}
 
 		if (
@@ -23,36 +21,30 @@ async function WIPCommand(context: Context<"issue_comment.created">) {
 			title.includes("work in progress") ||
 			title.includes(":construction:")
 		) {
-			const params = context.issue({
-				title: `${context.payload.issue.title.replace(":construction:", "")}`,
+			await context.octokit.issues.update({
+				...context.issue(),
+				title: context.payload.issue.title.replace(":construction:", ""),
 			});
-
-			context.octokit.issues.update(params);
 		}
 
-		label.remove("WIP");
-	}
-
-	if (!wipLabel) {
+		await removeLabel(context, "WIP");
+	} else {
 		if (foundReadyForReviewLabel) {
-			label.remove("Ready for Review");
+			await removeLabel(context, "Ready for Review");
 		}
 
-		label.add("WIP", "383214");
+		await addLabel(context, "WIP", "383214");
 
 		if (
-			!title.includes("WIP") ||
-			!title.includes("Work In Progress") ||
-			!title.includes("work in progress") ||
+			!title.includes("WIP") &&
+			!title.includes("Work In Progress") &&
+			!title.includes("work in progress") &&
 			!title.includes(":construction:")
 		) {
-			const params = context.issue({
+			await context.octokit.issues.update({
+				...context.issue(),
 				title: `:construction: ${context.payload.issue.title}`,
 			});
-
-			context.octokit.issues.update(params);
 		}
 	}
 }
-
-export default WIPCommand;

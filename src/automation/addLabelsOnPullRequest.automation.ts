@@ -1,174 +1,105 @@
-import { Context } from "probot";
+import type { Context } from "probot";
+import { addLabel, removeLabel, listLabelsOnIssue } from "../utils/label.util";
 
-import Label from "../utils/label.util";
-
-export async function addReadyForReviewLabel(context: Context<"pull_request.opened">) {
-	const label = new Label(context);
-
-	label.add("Ready for Review");
+export async function addReadyForReviewLabel(context: Context) {
+	await addLabel(context, "Ready for Review");
 }
 
-export async function addApprovedLabel(context: Context<"pull_request_review.submitted">) {
-	const label = new Label(context);
-	const params = context.pullRequest();
-	const issueLabels = await label.listIssueLabels();
+export async function addApprovedLabel(context: Context) {
+	const issueLabels = await listLabelsOnIssue(context);
+	const reviews = await context.octokit.pulls.listReviews(context.pullRequest());
 
-	const reviews = await context.octokit.pulls.listReviews(params);
-	const approvedLabel = issueLabels.data.filter((label) => label.name === "Approved");
-	const changesRequestedLabel = issueLabels.data.filter(
+	const hasApprovedLabel = issueLabels.data.some((label) => label.name === "Approved");
+	const hasChangesRequestedLabel = issueLabels.data.some(
 		(label) => label.name === "Changes requested",
+	);
+	const hasReadyForReviewLabel = issueLabels.data.some(
+		(label) => label.name === "Ready for Review",
 	);
 
 	const approvedReviews = reviews.data.filter((review) => review.state === "APPROVED");
-
-	const foundChangesRequestedReview = reviews.data.filter(
+	const changesRequestedReviews = reviews.data.filter(
 		(review) => review.state === "CHANGES_REQUESTED",
 	);
 
-	if (foundChangesRequestedReview.length === 0 && changesRequestedLabel.length > 0) {
-		// @ts-ignore
-		label.remove("Changes requested");
+	if (changesRequestedReviews.length === 0 && hasChangesRequestedLabel) {
+		await removeLabel(context, "Changes requested");
 	}
 
-	if (approvedReviews.length === 0 && approvedLabel.length > 0) {
-		label.remove("Approved");
+	if (approvedReviews.length === 0 && hasApprovedLabel) {
+		await removeLabel(context, "Approved");
 	}
 
 	if (approvedReviews.length > 0) {
-		const issueLabels = await label.listIssueLabels();
-
-		const foundReviewLabel = issueLabels.data.filter(
-			(label) => label.name === "Ready for Review",
-		);
-
-		if (approvedLabel.length === 0) {
-			label.add("Approved");
+		if (!hasApprovedLabel) {
+			await addLabel(context, "Approved");
 		}
 
-		if (foundReviewLabel.length > 0) {
-			label.remove("Ready for Review");
+		if (hasReadyForReviewLabel) {
+			await removeLabel(context, "Ready for Review");
 		}
 	}
 }
 
-export async function addMergedLabel(context: Context<"pull_request.closed">) {
-	const { title } = context.payload.pull_request;
-	const label = new Label(context);
-
-	if (context.payload.pull_request.merged) {
-		const issueLabels = await label.listIssueLabels();
-
-		const foundReadyForReviewLabel = issueLabels.data.filter(
-			(label) => label.name === "Ready for Review",
-		);
-		const foundApproveLabel = issueLabels.data.filter((label) => label.name === "Approved");
-		const foundWIPLabel = issueLabels.data.filter(
-			(label) => label.name === ":construction: WIP",
-		);
-
-		if (foundReadyForReviewLabel.length > 0) {
-			label.remove("Ready for Review");
-		}
-
-		if (foundApproveLabel.length > 0) {
-			label.remove("Approved");
-		}
-
-		if (foundWIPLabel.length > 0) {
-			label.remove(":construction: WIP");
-		}
-
-		label.add(":sparkles: Merged:");
-
-		if (
-			title.includes("WIP") ||
-			title.includes("Work In Progress") ||
-			title.includes("work in progress") ||
-			title.includes(":construction:")
-		) {
-			const params = context.pullRequest({
-				title: `${title.replace(":construction:", "")}`,
-			});
-
-			context.octokit.pulls.update(params);
-		}
-	}
-}
-
-export async function changesRequestLabel(context: Context<"pull_request_review.submitted">) {
-	const label = new Label(context);
-	const issueLabels = await label.listIssueLabels();
-
-	const params = context.pullRequest();
-
-	const reviews = await context.octokit.pulls.listReviews(params);
+export async function changesRequestLabel(context: Context) {
+	const issueLabels = await listLabelsOnIssue(context);
+	const reviews = await context.octokit.pulls.listReviews(context.pullRequest());
 
 	const changesRequestedReviews = reviews.data.filter(
 		(review) => review.state === "CHANGES_REQUESTED",
 	);
 
-	const foundChangedRequestedLabel = issueLabels.data.filter(
-		(label) => label.name === "Changes requested",
-	);
+	if (changesRequestedReviews.length > 0) {
+		const hasChangesRequestedLabel = issueLabels.data.some(
+			(label) => label.name === "Changes requested",
+		);
+		const hasReadyForReviewLabel = issueLabels.data.some(
+			(label) => label.name === "Ready for Review",
+		);
+		const hasApprovedLabel = issueLabels.data.some((label) => label.name === "Approved");
 
-	const foundReadyForReviewLabel = issueLabels.data.filter(
-		(label) => label.name === "Ready for Review",
-	);
+		if (!hasChangesRequestedLabel) {
+			await addLabel(context, "Changes requested", "AA2626");
+		}
 
-	const foundApprovedLabel = issueLabels.data.filter((label) => label.name === "Approved");
+		if (hasReadyForReviewLabel) {
+			await removeLabel(context, "Ready for Review");
+		}
 
-	if (changesRequestedReviews.length > 0 && foundChangedRequestedLabel.length === 0) {
-		label.add("Changes requested", "AA2626");
-	}
-
-	if (changesRequestedReviews.length > 0 && foundReadyForReviewLabel.length > 0) {
-		label.remove("Ready for Review");
-	}
-
-	if (changesRequestedReviews.length > 0 && foundApprovedLabel.length > 0) {
-		label.remove("Approved");
+		if (hasApprovedLabel) {
+			await removeLabel(context, "Approved");
+		}
 	}
 }
 
-export async function addCloseLabel(context: Context<"pull_request.closed">) {
-	try {
-		const params = context.pullRequest();
-		await context.octokit.pulls.checkIfMerged(params);
-	} catch (err) {
-		const label = new Label(context);
+export async function addMergedLabel(context: Context<"pull_request.closed">) {
+	if (context.payload.pull_request.merged) {
+		const issueLabels = await listLabelsOnIssue(context);
+		const labelsToRemove = ["Ready for Review", "Approved", "Changes requested"];
 
-		const issueLabels = await label.listIssueLabels();
-		const foundReadyForReviewLabel = issueLabels.data.filter(
-			(label) => label.name === "Ready for Review",
-		);
-		const foundApprovedLabel = issueLabels.data.filter((label) => label.name === "Approved");
-		const foundChangesRequestedLabel = issueLabels.data.filter(
-			(label) => label.name === "Changes requested",
-		);
-
-		if (foundReadyForReviewLabel.length > 0) {
-			label.remove("Ready for Review");
+		for (const labelName of labelsToRemove) {
+			if (issueLabels.data.some((label) => label.name === labelName)) {
+				await removeLabel(context, labelName);
+			}
 		}
 
-		if (foundApprovedLabel.length > 0) {
-			label.remove("Approved");
-		}
+		await addLabel(context as Context, ":sparkles: Merged:");
 
-		if (foundChangesRequestedLabel.length > 0) {
-			label.remove("Changes requested");
+		const title = context.payload.pull_request.title;
+		if (title.includes("WIP") || title.includes("Work In Progress")) {
+			await context.octokit.pulls.update({
+				...context.pullRequest(),
+				title: title.replace(/WIP|Work In Progress/gi, "").trim(),
+			});
 		}
-
-		label.add("closed", "B60205");
 	}
 }
 
 export async function removeClosedLabel(context: Context<"pull_request.reopened">) {
-	const label = new Label(context);
+	const issueLabels = await listLabelsOnIssue(context as Context);
+	const hasClosedLabel = issueLabels.data.find((label) => label.name === "closed");
 
-	const issueLabels = await label.listIssueLabels();
-	const foundClosedLabel = issueLabels.data.find((label) => label.name === "closed");
-
-	if (foundClosedLabel) {
-		label.remove("closed");
+	if (hasClosedLabel) {
+		await removeLabel(context as Context, "closed");
 	}
 }

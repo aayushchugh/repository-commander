@@ -1,26 +1,19 @@
 import type { Context } from "probot";
-import Comment from "../utils/comment.util";
+import { createComment } from "../utils/comment.util";
 
-async function approveCommand(context: Context<"issue_comment.created">) {
-	const pullParams = context.pullRequest();
-	const comment = new Comment(context);
-
-	// Check if the comment is on a pull request
+export async function handleApproveCommand(context: Context<"issue_comment.created">) {
 	if (!context.payload.issue.pull_request) {
-		const comment = new Comment(context);
-		comment.create("This command can only be used on pull requests.");
+		await createComment(context, "This command can only be used on pull requests.");
 		return;
 	}
 
-	// @ts-ignore
-	comment.create(
+	await createComment(
+		context,
 		`Approving changes of this pull_request as requested by @${context.payload.comment.user.login}`,
 	);
 
 	await context.octokit.pulls.createReview({
-		...pullParams,
+		...context.pullRequest(),
 		event: "APPROVE",
 	});
 }
-
-export default approveCommand;

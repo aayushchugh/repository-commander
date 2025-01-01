@@ -1,30 +1,19 @@
-import Label from "../utils/label.util";
 import type { Context } from "probot";
+import { createComment } from "../utils/comment.util";
+import { addLabel } from "../utils/label.util";
 
-/**
- * This is main function which will run on /label command
- *
- * @param {*} context  Probot context
- * @param {*} args  Arguments passed to the command
- */
-async function labelCommand(context: Context<"issue_comment.created">, args: string[]) {
-	const labelsToAdd: string[] = [];
-	const label = new Label(context);
-	const labelsFromIssue = await label.listIssueLabels();
-
-	args.forEach((name) => {
-		const foundIssueLabel = labelsFromIssue.data.find((issueLabel) => issueLabel.name === name);
-
-		if (foundIssueLabel) {
-			label.remove(name);
-		} else {
-			labelsToAdd.push(name);
-		}
-	});
-
-	if (labelsToAdd.length > 0) {
-		label.add(labelsToAdd);
+export async function handleLabelCommand(
+	context: Context<"issue_comment.created">,
+	args: string[],
+) {
+	if (!args.length) {
+		await createComment(context, "Please provide at least one label name to add.");
+		return;
 	}
-}
 
-export default labelCommand;
+	await addLabel(context, args);
+	await createComment(
+		context,
+		`Added ${args.length > 1 ? "labels" : "label"} as requested by @${context.payload.comment.user.login}`,
+	);
+}

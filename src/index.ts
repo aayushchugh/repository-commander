@@ -1,110 +1,88 @@
 import { Probot } from "probot";
 import type { Context } from "probot";
-
+import { handleWIPCommand } from "./commands/wip.command";
+import { handleApproveCommand } from "./commands/approve.command";
+import { handleCloseCommand } from "./commands/close.command";
+import { handleIssueClose } from "./automation/addLabelToIssueOnClose.automation";
+import {
+	requestMoreInfo,
+	removeRequestMoreInfoLabel,
+} from "./automation/requestMoreInfo.automation";
+import { createComment, deleteComment } from "./utils/comment.util";
+import { getCommandAndArgs } from "./utils/getCommandAndArgs.util";
+import { handleLabelCommand } from "./commands/label.command";
+import { handleMergeCommand } from "./commands/merge.command";
 import {
 	addReadyForReviewLabel,
 	addApprovedLabel,
-	addMergedLabel,
 	changesRequestLabel,
-	addCloseLabel,
+	addMergedLabel,
 	removeClosedLabel,
 } from "./automation/addLabelsOnPullRequest.automation";
-import addLabelToIssueOnClose from "./automation/addLabelToIssueOnClose.automation";
-import approveCommand from "./commands/approve.command";
-import closeCommand from "./commands/close.command";
-import labelCommand from "./commands/label.command";
-import mergeCommand from "./commands/merge.command";
-import WIPCommand from "./commands/wip.command";
-import Comment from "./utils/comment.util";
-import getCommandAndArgs from "./utils/getCommandAndArgs.util";
-import {
-	removeRequestMoreInfoLabel,
-	requestMoreInfo,
-} from "./automation/requestMoreInfo.automation";
 
 const availableCommandsMessage = `Available commands are:- 
-						    - **/label** - Add labels to an issue or pull request.
-							- **/close** - Close an issue or pull request.
-							- **/approve** - Approve a pull request.
-							- **/merge** - Merge a pull request.
-							- **/WIP** - Add the WIP label.`;
+    - **/label** - Add labels to an issue or pull request.
+    - **/close** - Close an issue or pull request.
+    - **/approve** - Approve a pull request.
+    - **/merge** - Merge a pull request.
+    - **/WIP** - Add the WIP label.`;
 
-/**
- * This is the main entrypoint to your Probot app
- * @param {import('probot').Probot} app
- */
 export = (app: Probot) => {
-	/* --------------------------------- ANCHOR Automation --------------------------------- */
 	app.on("pull_request.opened", addReadyForReviewLabel);
-	app.on("issues.opened", requestMoreInfo);
-	app.on("issues.edited", removeRequestMoreInfoLabel);
-
 	app.on("pull_request_review.submitted", addApprovedLabel);
 	app.on("pull_request_review.submitted", changesRequestLabel);
-
 	app.on("pull_request.closed", addMergedLabel);
-	app.on("pull_request.closed", addCloseLabel);
 	app.on("pull_request.reopened", removeClosedLabel);
+	app.on("issues.opened", requestMoreInfo);
+	app.on("issues.edited", removeRequestMoreInfoLabel);
+	app.on("issues.closed", handleIssueClose);
 
-	app.on("issues.closed", addLabelToIssueOnClose);
-
-	/* --------------------------------- ANCHOR Issue commands --------------------------------- */
 	app.on("issue_comment.created", async (context: Context<"issue_comment.created">) => {
 		const { body } = context.payload.comment;
 		const { command, args } = getCommandAndArgs(body);
-		const commentId = context.payload.comment.id;
-
-		const comment = new Comment(context);
 
 		if (command[0] === "/" && !context.isBot) {
-			const params = context.issue();
-
-			// context.octokit.reactions.createForIssueComment(params);
-			context.octokit.reactions.createForIssueComment({
-				owner: params.owner,
-				repo: params.repo,
-				comment_id: commentId,
+			await context.octokit.reactions.createForIssueComment({
+				...context.issue(),
+				comment_id: context.payload.comment.id,
 				content: "rocket",
 			});
 		}
 
 		switch (command) {
-			case "/label":
-				labelCommand(context, args);
-				break;
-			case "/close":
-				closeCommand(context);
+			case "/wip":
+				await handleWIPCommand(context);
 				break;
 			case "/approve":
-				approveCommand(context);
+				await handleApproveCommand(context);
+				break;
+			case "/close":
+				await handleCloseCommand(context);
+				break;
+			case "/label":
+				await handleLabelCommand(context, args);
 				break;
 			case "/merge":
-				mergeCommand(context);
+				await handleMergeCommand(context);
 				break;
-			case "/WIP":
-				WIPCommand(context);
-				break;
+			// ... other commands
 
 			default:
-				if (command[0] === "/") {
-					if (!context.isBot) {
-						const params = context.issue();
+				if (command[0] === "/" && !context.isBot) {
+					await context.octokit.reactions.createForIssueComment({
+						...context.issue(),
+						comment_id: context.payload.comment.id,
+						content: "-1",
+					});
 
-						context.octokit.reactions.createForIssueComment({
-							owner: params.owner,
-							repo: params.repo,
-							comment_id: commentId,
-							content: "-1",
-						});
+					await createComment(
+						context,
+						`**${command}** command doesn't exist.\n${availableCommandsMessage}`,
+					);
+				}
 
-						comment.create(`**${command}** command doesn't exist.
-						     ${availableCommandsMessage}
-						    `);
-					}
-
-					if (context.isBot) {
-						comment.delete();
-					}
+				if (context.isBot) {
+					await deleteComment(context);
 				}
 				break;
 		}

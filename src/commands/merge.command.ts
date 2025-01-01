@@ -1,34 +1,26 @@
 import type { Context } from "probot";
-import Comment from "../utils/comment.util";
+import { createComment } from "../utils/comment.util";
 
-async function mergeCommand(context: Context<"issue_comment.created">) {
-	const params = context.pullRequest();
-	const pullRequest = await context.octokit.pulls.get(params);
-
-	const comment = new Comment(context);
-
-	// Check if the comment is on a pull request
+export async function handleMergeCommand(context: Context<"issue_comment.created">) {
 	if (!context.payload.issue.pull_request) {
-		const comment = new Comment(context);
-		comment.create("This command can only be used on pull requests.");
+		await createComment(context, "This command can only be used on pull requests.");
 		return;
 	}
 
+	const pullRequest = await context.octokit.pulls.get(context.pullRequest());
+
 	if (!pullRequest.data.mergeable) {
-		// @ts-ignore
-		return comment.create(":warning: Pull request is not mergeable.");
+		await createComment(
+			context,
+			"This pull request cannot be merged right now. Please resolve conflicts first.",
+		);
+		return;
 	}
 
-	comment.create(
-		`Merging this pull_request as requested by @${context.payload.comment.user.login}`,
+	await createComment(
+		context,
+		`Merging pull request as requested by @${context.payload.comment.user.login}`,
 	);
 
-	context.octokit.pulls.merge({
-		owner: params.owner,
-		repo: params.repo,
-		pull_number: params.pull_number,
-		merge_method: "rebase",
-	});
+	await context.octokit.pulls.merge(context.pullRequest());
 }
-
-export default mergeCommand;

@@ -1,23 +1,19 @@
 import type { Context } from "probot";
-import Label from "../utils/label.util";
+import { addLabel, listLabelsOnIssue } from "../utils/label.util";
 
-async function addLabelToIssueOnClose(context: Context<"issues.closed">) {
-	const label = new Label(context);
-	const issueLabels = await label.listIssueLabels();
+export async function handleIssueClose(context: Context<"issues.closed">) {
+	const issueLabels = await listLabelsOnIssue(context);
 
-	const previousBugLabel = issueLabels.data.find((label) => label.name === "bug");
-
-	const previousFeatureLabel = issueLabels.data.find(
+	const hasBugLabel = issueLabels.data.find((label) => label.name === "bug");
+	const hasFeatureLabel = issueLabels.data.find(
 		(label) => label.name === "feature" || label.name === "enhancement",
 	);
 
-	if (previousBugLabel) {
-		label.add("fixed");
+	if (hasBugLabel) {
+		await addLabel(context, "fixed");
 	}
 
-	if (previousFeatureLabel) {
-		label.add("implemented");
+	if (hasFeatureLabel) {
+		await addLabel(context, "implemented");
 	}
 }
-
-export default addLabelToIssueOnClose;

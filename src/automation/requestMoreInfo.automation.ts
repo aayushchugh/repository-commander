@@ -1,34 +1,33 @@
 import type { Context } from "probot";
-import Comment from "../utils/comment.util";
-import Label from "../utils/label.util";
+import { createComment } from "../utils/comment.util";
+import { addLabel, removeLabel, listLabelsOnIssue } from "../utils/label.util";
 
-export async function requestMoreInfo(context: Context<"issues.opened">) {
-	const { body } = context.payload.issue;
-	const comment = new Comment(context);
-	const label = new Label(context);
+export async function requestMoreInfo(context: Context<"issues.opened" | "issues.edited">) {
+	const { body, user } = context.payload.issue;
 
 	if (!body || body.length < 20) {
-		comment.create(`Hey There! @${context.payload.issue.user.login} You didn't give us a whole lot of information about this issue. We would love if you could provide more details about what you're trying to accomplish here.
-            Please edit your issue to include more details.`);
+		await createComment(
+			context,
+			`Hey There! @${user.login} You didn't give us a whole lot of information about this issue. We would love if you could provide more details about what you're trying to accomplish here.
+			Please edit your issue to include more details.`,
+		);
 
-		label.add("needs more info", "B60205");
+		await addLabel(context, "needs more info", "B60205");
 	}
 }
 
 export async function removeRequestMoreInfoLabel(context: Context<"issues.edited">) {
-	const { body } = context.payload.issue;
-	const comment = new Comment(context);
-	const label = new Label(context);
-	const issueLabels = await label.listIssueLabels();
-	const foundNeedsMoreInfoLabel = issueLabels.data.find(
-		(label: any) => label.name === "needs more info",
-	);
+	const { body, user } = context.payload.issue;
+	const labels = await listLabelsOnIssue(context);
 
-	if (foundNeedsMoreInfoLabel && body && body.length > 20) {
-		comment.create(
-			`@${context.payload.issue.user.login} Thanks for adding more information to this issue! I've removed the "needs more info" label.`,
+	const hasNeedsMoreInfoLabel = labels.data.find((label) => label.name === "needs more info");
+
+	if (hasNeedsMoreInfoLabel && body && body.length > 20) {
+		await createComment(
+			context,
+			`@${user.login} Thanks for adding more information to this issue! I've removed the "needs more info" label.`,
 		);
 
-		label.remove("needs more info");
+		await removeLabel(context, "needs more info");
 	}
 }
