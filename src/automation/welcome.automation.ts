@@ -6,16 +6,32 @@ export async function welcomeFirstTimeContributor(context: Context<"pull_request
 	const config = await getConfig(context);
 	if (!config.automation.welcomeContributor) return;
 
-	const { sender } = context.payload;
-	const pulls = await context.octokit.pulls.list({
-		...context.repo(),
-		state: "all",
-		creator: sender.login,
-	});
+	try {
+		const { sender } = context.payload;
+		// Handle bot users
+		if (sender.type === "Bot") return;
 
-	if (pulls.data.length === 1) {
-		const message = config.messages.welcomeContributor.replace("{user}", sender.login);
-		await createComment(context, message);
+		// Check if user is organization member to avoid welcoming team members
+		const { data: isMember } = await context.octokit.orgs
+			.checkMembershipForUser({
+				org: context.payload.organization?.login || context.repo().owner,
+				username: sender.login,
+			})
+			.catch(() => ({ data: false }));
+		if (isMember) return;
+
+		const pulls = await context.octokit.pulls.list({
+			...context.repo(),
+			state: "all",
+			creator: sender.login,
+		});
+
+		if (pulls.data.length === 1) {
+			const message = config.messages.welcomeContributor.replace("{user}", sender.login);
+			await createComment(context, message);
+		}
+	} catch (error) {
+		console.error("Error in welcomeFirstTimeContributor:", error);
 	}
 }
 

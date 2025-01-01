@@ -7,14 +7,34 @@ export async function requestMoreInfo(context: Context<"issues.opened" | "issues
 	const config = await getConfig(context);
 	const { body, user } = context.payload.issue;
 
-	if (!body || body.length < config.minBodyLength) {
-		await addLabel(context, config.labels.needsMoreInfo, config.colors.orange);
+	try {
+		// Skip for bot users
+		if (context.isBot) return;
 
-		const message = config.messages.requestMoreInfo
-			.replace("{user}", user.login)
-			.replace("{type}", context.payload.issue.pull_request ? "pull request" : "issue");
+		// Skip if issue is from template and has checkboxes
+		if (body?.includes("- [ ]") || body?.includes("- [x]")) return;
 
-		await createComment(context, message);
+		// Handle completely empty body
+		if (!body || body.trim().length === 0) {
+			await addLabel(context, config.labels.needsMoreInfo, config.colors.orange);
+			const message = config.messages.requestMoreInfo
+				.replace("{user}", user.login)
+				.replace("{type}", context.payload.issue.pull_request ? "pull request" : "issue");
+			await createComment(context, message);
+			return;
+		}
+
+		// Handle body with only whitespace or markdown formatting
+		const cleanBody = body.replace(/[#*`\s\n\r]/g, "");
+		if (cleanBody.length < config.minBodyLength) {
+			await addLabel(context, config.labels.needsMoreInfo, config.colors.orange);
+			const message = config.messages.requestMoreInfo
+				.replace("{user}", user.login)
+				.replace("{type}", context.payload.issue.pull_request ? "pull request" : "issue");
+			await createComment(context, message);
+		}
+	} catch (error) {
+		console.error("Error in requestMoreInfo:", error);
 	}
 }
 
