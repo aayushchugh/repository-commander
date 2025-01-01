@@ -1,7 +1,7 @@
 version: "3.8"
 
 services:
-    repository_commander_server:
+    repo_command_server:
         build: .
         container_name: repo-command
         restart: unless-stopped
