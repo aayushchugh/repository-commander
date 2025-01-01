@@ -1,10 +1,11 @@
 import type { Context } from "probot";
 import { addLabel, removeLabel, listLabelsOnIssue } from "../utils/label.util";
-import { Labels, Colors } from "../constants/enums";
+import { getConfig } from "../utils/config.util";
 import { hasWriteAccess, isAuthor } from "../utils/permissions.util";
 import { createComment } from "../utils/comment.util";
 
 export async function handleWIPCommand(context: Context<"issue_comment.created">) {
+	const config = await getConfig(context);
 	const canModify = (await hasWriteAccess(context)) || isAuthor(context);
 
 	if (!canModify) {
@@ -18,14 +19,14 @@ export async function handleWIPCommand(context: Context<"issue_comment.created">
 	const { title } = context.payload.issue;
 	const labelsFromIssues = await listLabelsOnIssue(context);
 
-	const wipLabel = labelsFromIssues.data.find((label) => label.name === Labels.WIP);
+	const wipLabel = labelsFromIssues.data.find((label) => label.name === config.labels.wip);
 	const foundReadyForReviewLabel = labelsFromIssues.data.find(
-		(label) => label.name === Labels.READY_FOR_REVIEW,
+		(label) => label.name === config.labels.readyForReview,
 	);
 
 	if (wipLabel) {
 		if (!foundReadyForReviewLabel && context.payload.issue.pull_request) {
-			await addLabel(context, Labels.READY_FOR_REVIEW);
+			await addLabel(context, config.labels.readyForReview);
 		}
 
 		if (
@@ -40,13 +41,13 @@ export async function handleWIPCommand(context: Context<"issue_comment.created">
 			});
 		}
 
-		await removeLabel(context, Labels.WIP);
+		await removeLabel(context, config.labels.wip);
 	} else {
 		if (foundReadyForReviewLabel) {
-			await removeLabel(context, Labels.READY_FOR_REVIEW);
+			await removeLabel(context, config.labels.readyForReview);
 		}
 
-		await addLabel(context, Labels.WIP, Colors.GRAY);
+		await addLabel(context, config.labels.wip, config.colors.gray);
 
 		if (
 			!title.includes("WIP") &&

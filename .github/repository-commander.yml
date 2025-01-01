@@ -1,0 +1,33 @@
+minBodyLength: 50
+
+# Command settings
+commands:
+    wip: true
+    approve: true
+    close: true
+    label: true
+    merge: true
+    requestInfo: true
+
+# Automation settings
+automations:
+    addReadyForReview: true
+    addApprovedLabel: true
+    addChangesRequestedLabel: true
+    addMergedLabel: true
+    removeClosedLabel: true
+    requestMoreInfo: true
+    addLabelsOnClose: true
+
+# Label settings
+labels:
+    wip: "work in progress"
+    readyForReview: "ready for review"
+    approved: "approved"
+    changesRequested: "changes requested"
+
+# Color settings
+colors:
+    red: "AA2626"
+    orange: "B60205"
+    gray: "383214"

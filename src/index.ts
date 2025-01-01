@@ -19,8 +19,17 @@ import {
 	addMergedLabel,
 	removeClosedLabel,
 } from "./automation/addLabelsOnPullRequest.automation";
-import { Commands } from "./constants/enums";
 import { handleRequestMoreInfoCommand } from "./commands/requestMoreInfo.command";
+import { getConfig } from "./utils/config.util";
+
+const COMMANDS = {
+	WIP: "/wip",
+	APPROVE: "/approve",
+	CLOSE: "/close",
+	LABEL: "/label",
+	MERGE: "/merge",
+	REQUEST_INFO: "/request-info",
+} as const;
 
 const availableCommandsMessage = `Available commands are:- 
     - **/label** - Add labels to an issue or pull request.
@@ -31,18 +40,62 @@ const availableCommandsMessage = `Available commands are:-
     - **/request-info** - Request more information from the author.`;
 
 export = (app: Probot) => {
-	app.on("pull_request.opened", addReadyForReviewLabel);
-	app.on("pull_request_review.submitted", addApprovedLabel);
-	app.on("pull_request_review.submitted", changesRequestLabel);
-	app.on("pull_request.closed", addMergedLabel);
-	app.on("pull_request.reopened", removeClosedLabel);
-	app.on("issues.opened", requestMoreInfo);
-	app.on("issues.edited", removeRequestMoreInfoLabel);
-	app.on("issues.closed", handleIssueClose);
+	app.on("pull_request.opened", async (context) => {
+		const config = await getConfig(context);
+		if (config.automation.addReadyForReview) {
+			await addReadyForReviewLabel(context);
+		}
+	});
+
+	app.on("pull_request_review.submitted", async (context) => {
+		const config = await getConfig(context);
+		if (config.automation.addApprovedLabel) {
+			await addApprovedLabel(context);
+		}
+		if (config.automation.addChangesRequestedLabel) {
+			await changesRequestLabel(context);
+		}
+	});
+
+	app.on("pull_request.closed", async (context) => {
+		const config = await getConfig(context);
+		if (config.automation.addMergedLabel) {
+			await addMergedLabel(context);
+		}
+	});
+
+	app.on("pull_request.reopened", async (context) => {
+		const config = await getConfig(context);
+		if (config.automation.removeClosedLabel) {
+			await removeClosedLabel(context);
+		}
+	});
+
+	app.on("issues.opened", async (context) => {
+		const config = await getConfig(context);
+		if (config.automation.requestMoreInfo) {
+			await requestMoreInfo(context);
+		}
+	});
+
+	app.on("issues.edited", async (context) => {
+		const config = await getConfig(context);
+		if (config.automation.requestMoreInfo) {
+			await removeRequestMoreInfoLabel(context);
+		}
+	});
+
+	app.on("issues.closed", async (context) => {
+		const config = await getConfig(context);
+		if (config.automation.addLabelsOnClose) {
+			await handleIssueClose(context);
+		}
+	});
 
 	app.on("issue_comment.created", async (context: Context<"issue_comment.created">) => {
 		const { body } = context.payload.comment;
 		const { command, args } = getCommandAndArgs(body);
+		const config = await getConfig(context);
 
 		if (command[0] === "/" && !context.isBot) {
 			await context.octokit.reactions.createForIssueComment({
@@ -53,25 +106,53 @@ export = (app: Probot) => {
 		}
 
 		switch (command) {
-			case Commands.WIP:
+			case COMMANDS.WIP:
+				if (!config.commands.wip) {
+					await createComment(context, "The WIP command is disabled.");
+					return;
+				}
 				await handleWIPCommand(context);
 				break;
-			case Commands.APPROVE:
+
+			case COMMANDS.APPROVE:
+				if (!config.commands.approve) {
+					await createComment(context, "The approve command is disabled.");
+					return;
+				}
 				await handleApproveCommand(context);
 				break;
-			case Commands.CLOSE:
+
+			case COMMANDS.CLOSE:
+				if (!config.commands.close) {
+					await createComment(context, "The close command is disabled.");
+					return;
+				}
 				await handleCloseCommand(context);
 				break;
-			case Commands.LABEL:
+
+			case COMMANDS.LABEL:
+				if (!config.commands.label) {
+					await createComment(context, "The label command is disabled.");
+					return;
+				}
 				await handleLabelCommand(context, args);
 				break;
-			case Commands.MERGE:
+
+			case COMMANDS.MERGE:
+				if (!config.commands.merge) {
+					await createComment(context, "The merge command is disabled.");
+					return;
+				}
 				await handleMergeCommand(context);
 				break;
-			case Commands.REQUEST_INFO:
+
+			case COMMANDS.REQUEST_INFO:
+				if (!config.commands.requestInfo) {
+					await createComment(context, "The request-info command is disabled.");
+					return;
+				}
 				await handleRequestMoreInfoCommand(context, args);
 				break;
-			// ... other commands
 
 			default:
 				if (command[0] === "/" && !context.isBot) {
@@ -86,10 +167,6 @@ export = (app: Probot) => {
 						`**${command}** command doesn't exist.\n${availableCommandsMessage}`,
 					);
 				}
-
-				// if (context.isBot) {
-				// 	await deleteComment(context);
-				// }
 				break;
 		}
 	});
