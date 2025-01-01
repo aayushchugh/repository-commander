@@ -20,13 +20,15 @@ import {
 	removeClosedLabel,
 } from "./automation/addLabelsOnPullRequest.automation";
 import { Commands } from "./constants/enums";
+import { handleRequestMoreInfoCommand } from "./commands/requestMoreInfo.command";
 
 const availableCommandsMessage = `Available commands are:- 
     - **/label** - Add labels to an issue or pull request.
     - **/close** - Close an issue or pull request.
     - **/approve** - Approve a pull request.
     - **/merge** - Merge a pull request.
-    - **/WIP** - Add the WIP label.`;
+    - **/WIP** - Add the WIP label.
+    - **/request-info** - Request more information from the author.`;
 
 export = (app: Probot) => {
 	app.on("pull_request.opened", addReadyForReviewLabel);
@@ -66,6 +68,9 @@ export = (app: Probot) => {
 			case Commands.MERGE:
 				await handleMergeCommand(context);
 				break;
+			case Commands.REQUEST_INFO:
+				await handleRequestMoreInfoCommand(context, args);
+				break;
 			// ... other commands
 
 			default:
@@ -82,9 +87,9 @@ export = (app: Probot) => {
 					);
 				}
 
-				if (context.isBot) {
-					await deleteComment(context);
-				}
+				// if (context.isBot) {
+				// 	await deleteComment(context);
+				// }
 				break;
 		}
 	});

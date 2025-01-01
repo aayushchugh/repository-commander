@@ -32,4 +32,5 @@ export enum Commands {
 	CLOSE = "/close",
 	LABEL = "/label",
 	MERGE = "/merge",
+	REQUEST_INFO = "/request-info",
 }
