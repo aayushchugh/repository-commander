@@ -19,16 +19,10 @@ export async function handleApproveCommand(context: Context<"issue_comment.creat
 		return;
 	}
 
-	const config = await getConfig(context);
-
 	await createComment(context, `Pull request approved by @${context.payload.comment.user.login}`);
 
 	await context.octokit.pulls.createReview({
 		...context.pullRequest(),
 		event: "APPROVE",
 	});
-
-	// Add approved label and remove changes requested label if present
-	await addLabel(context, config.labels.approved, config.colors.green);
-	await removeLabel(context, config.labels.changesRequested);
 }
