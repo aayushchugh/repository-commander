@@ -1,7 +1,7 @@
 # The ID of your GitHub App
-id: $APP_ID
-webhook_secret: $WEBHOOK_SECRET
-private_key: $PRIVATE_KEY
+# id: $APP_ID
+# webhook_secret: $WEBHOOK_SECRET
+# private_key: $PRIVATE_KEY
 
 # Set to true if your GitHub App was installed on a GitHub Enterprise instance
 enterprise: false
