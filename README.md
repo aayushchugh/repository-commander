@@ -75,83 +75,6 @@ using `/` commands in your comments to do some nice stuff like approving and mer
 
     ![Close command]((https://user-images.githubusercontent.com/69336518/188459023-9195e332-7aa7-4f84-9bb8-7cc8fb45432b.gif)
 
-## Configuration
-
-Create a `.github/repository-commander.yml` file in your repository to customize the bot's behavior:
-
-```yml
-# Minimum length required for issue/PR descriptions
-minBodyLength: 50
-
-# Enable/disable commands
-commands:
-    # Enable/disable /wip command (default: true)
-    wip: true
-    # Enable/disable /approve command (default: true)
-    approve: true
-    # Enable/disable /close command (default: true)
-    close: true
-    # Enable/disable /label command (default: true)
-    label: true
-    # Enable/disable /merge command (default: true)
-    merge: true
-    # Enable/disable /request-info command (default: true)
-    requestInfo: true
-
-# Enable/disable automations
-automations:
-    # Automatically add ready for review label to new PRs (default: true)
-    addReadyForReview: true
-    # Automatically add approved label when PR is approved (default: true)
-    addApprovedLabel: true
-    # Automatically add changes requested label when changes are requested (default: true)
-    addChangesRequestedLabel: true
-    # Automatically add merged label when PR is merged (default: true)
-    addMergedLabel: true
-    # Automatically remove closed label when PR is reopened (default: true)
-    removeClosedLabel: true
-    # Automatically request more info on short descriptions (default: true)
-    requestMoreInfo: true
-    # Automatically add labels on issue close (default: true)
-    addLabelsOnClose: true
-
-# Configure label names
-labels:
-    # Label for work in progress (default: "WIP")
-    wip: "work in progress"
-    # Label for ready for review (default: "ready for review")
-    readyForReview: "ready for review"
-    # Label for approved PRs (default: "approved")
-    approved: "approved"
-    # Label for PRs needing changes (default: "changes requested")
-    changesRequested: "changes requested"
-    # Label for issues needing more info (default: "needs more info")
-    needsMoreInfo: "needs more info"
-    # Label for merged PRs (default: "merged")
-    merged: "merged"
-    # Label for closed issues/PRs (default: "closed")
-    closed: "closed"
-    # Label for bugs (default: "bug")
-    bug: "bug"
-    # Label for features (default: "feature")
-    feature: "feature"
-    # Label for enhancements (default: "enhancement")
-    enhancement: "enhancement"
-    # Label for fixed issues (default: "fixed")
-    fixed: "fixed"
-    # Label for implemented features (default: "implemented")
-    implemented: "implemented"
-
-# Configure label colors
-colors:
-    # Color for error/warning labels (default: "AA2626")
-    red: "AA2626"
-    # Color for pending labels (default: "B60205")
-    orange: "B60205"
-    # Color for neutral labels (default: "383214")
-    gray: "383214"
-```
-
 ### Automations
 
 The bot includes several automatic behaviors that can be enabled or disabled:
@@ -191,11 +114,133 @@ The bot includes several automatic behaviors that can be enabled or disabled:
     - Triggers on: Issues opened/edited
 
 7. **Close Labels** (`addLabelsOnClose`)
+
     - Adds "fixed" label to closed bug issues
     - Adds "implemented" label to closed feature/enhancement issues
     - Triggers on: Issue closed
 
+8. **Welcome Messages** (`welcomeContributor`, `welcomeIssue`)
+
+    - Welcomes first-time contributors when they open their first PR
+    - Welcomes users when they open their first issue
+    - Provides helpful information and next steps
+    - Triggers on: Pull request opened, Issues opened
+
 Each automation can be enabled or disabled independently through the configuration file.
+
+## Configuration
+
+Create a `.github/repository-commander.yml` file in your repository to customize the bot's behavior:
+
+```yml
+# Minimum length required for issue/PR descriptions
+minBodyLength: 50
+
+# Enable/disable commands
+commands:
+    # Enable/disable /wip command (default: true)
+    wip: true
+    # Enable/disable /approve command (default: true)
+    approve: true
+    # Enable/disable /close command (default: true)
+    close: true
+    # Enable/disable /label command (default: true)
+    label: true
+    # Enable/disable /merge command (default: true)
+    merge: true
+    # Enable/disable /request-info command (default: true)
+    requestInfo: true
+
+# Enable/disable automations
+automations:
+    # Automatically add ready for review label to new PRs (default: true)
+    addReadyForReview: true
+    # Automatically add approved label when PR is approved (default: true)
+    addApprovedLabel: true
+    # Automatically add changes requested label when changes are requested (default: true)
+    addChangesRequestedLabel: true
+    # Automatically add merged label when PR is merged (default: true)
+    addMergedLabel: true
+    # Automatically remove closed label when PR is reopened (default: true)
+    removeClosedLabel: true
+    # Automatically request more info on short descriptions (default: true)
+    requestMoreInfo: true
+    # Automatically add labels on issue close (default: true)
+    addLabelsOnClose: true
+    # Welcome new contributors on their first PR (default: true)
+    welcomeContributor: true
+    # Welcome users on their first issue (default: true)
+    welcomeIssue: true
+
+# Configure label names
+labels:
+    # Label for work in progress (default: "WIP")
+    wip: "work in progress"
+    # Label for ready for review (default: "ready for review")
+    readyForReview: "ready for review"
+    # Label for approved PRs (default: "approved")
+    approved: "approved"
+    # Label for PRs needing changes (default: "changes requested")
+    changesRequested: "changes requested"
+    # Label for issues needing more info (default: "needs more info")
+    needsMoreInfo: "needs more info"
+    # Label for merged PRs (default: "merged")
+    merged: "merged"
+    # Label for closed issues/PRs (default: "closed")
+    closed: "closed"
+    # Label for bugs (default: "bug")
+    bug: "bug"
+    # Label for features (default: "feature")
+    feature: "feature"
+    # Label for enhancements (default: "enhancement")
+    enhancement: "enhancement"
+    # Label for fixed issues (default: "fixed")
+    fixed: "fixed"
+    # Label for implemented features (default: "implemented")
+    implemented: "implemented"
+
+# Configure label colors
+colors:
+    # Color for error/warning labels (default: "AA2626")
+    red: "AA2626"
+    # Color for pending labels (default: "B60205")
+    orange: "B60205"
+    # Color for neutral labels (default: "383214")
+    gray: "383214"
+
+# Configure welcome messages
+messages:
+    # Message for first-time PR contributors (use {user} for username)
+    welcomeContributor: |
+        Thanks for your first pull request, @{user}! 🎉
+
+        The team will review your changes soon. In the meantime, please make sure:
+        - [ ] Tests pass
+        - [ ] Documentation is updated (if needed)
+        - [ ] Commit messages follow our guidelines
+
+        Welcome to our community! 🚀
+
+    # Message for first-time issue creators (use {user} for username)
+    welcomeIssue: |
+        Thanks for opening your first issue, @{user}! 🎉
+
+        We appreciate you taking the time to contribute to the project.
+        Someone will respond to your issue soon. 👍
+
+    # Message when requesting more information
+    requestMoreInfo: |
+        Hey @{user}! We need more information.
+        Please edit your {type} to include more details.
+
+    # Message when user adds more information
+    moreInfoAdded: |
+        Thanks @{user} for adding more information!
+
+Available placeholders:
+- `{user}` - Will be replaced with the username
+- `{type}` - Will be replaced with "issue" or "pull request" (only in requestMoreInfo)
+```
 
 ## Contributing
 

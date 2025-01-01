@@ -21,6 +21,10 @@ import {
 } from "./automation/addLabelsOnPullRequest.automation";
 import { handleRequestMoreInfoCommand } from "./commands/requestMoreInfo.command";
 import { getConfig } from "./utils/config.util";
+import {
+	welcomeFirstTimeContributor,
+	welcomeFirstTimeIssue,
+} from "./automation/welcome.automation";
 
 const COMMANDS = {
 	WIP: "/wip",
@@ -45,6 +49,7 @@ export = (app: Probot) => {
 		if (config.automation.addReadyForReview) {
 			await addReadyForReviewLabel(context);
 		}
+		await welcomeFirstTimeContributor(context);
 	});
 
 	app.on("pull_request_review.submitted", async (context) => {
@@ -76,6 +81,7 @@ export = (app: Probot) => {
 		if (config.automation.requestMoreInfo) {
 			await requestMoreInfo(context);
 		}
+		await welcomeFirstTimeIssue(context);
 	});
 
 	app.on("issues.edited", async (context) => {

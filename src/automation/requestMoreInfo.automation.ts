@@ -10,11 +10,11 @@ export async function requestMoreInfo(context: Context<"issues.opened" | "issues
 	if (!body || body.length < config.minBodyLength) {
 		await addLabel(context, config.labels.needsMoreInfo, config.colors.orange);
 
-		await createComment(
-			context,
-			`Hey @${user.login}! We need more information to help you better. Please provide more details about what you're trying to accomplish here.
-			Please edit your issue to include more details.`,
-		);
+		const message = config.messages.requestMoreInfo
+			.replace("{user}", user.login)
+			.replace("{type}", context.payload.issue.pull_request ? "pull request" : "issue");
+
+		await createComment(context, message);
 	}
 }
 
@@ -30,9 +30,7 @@ export async function removeRequestMoreInfoLabel(context: Context<"issues.edited
 	if (hasNeedsMoreInfoLabel && body && body.length >= config.minBodyLength) {
 		await removeLabel(context, config.labels.needsMoreInfo);
 
-		await createComment(
-			context,
-			`@${user.login} Thanks for adding more information! I've removed the needs more info label.`,
-		);
+		const message = config.messages.moreInfoAdded.replace("{user}", user.login);
+		await createComment(context, message);
 	}
 }

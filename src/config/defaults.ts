@@ -16,6 +16,8 @@ export interface BotConfig {
 		removeClosedLabel: boolean;
 		requestMoreInfo: boolean;
 		addLabelsOnClose: boolean;
+		welcomeContributor: boolean;
+		welcomeIssue: boolean;
 	};
 	labels: {
 		wip: string;
@@ -35,6 +37,12 @@ export interface BotConfig {
 		red: string;
 		orange: string;
 		gray: string;
+	};
+	messages: {
+		welcomeContributor: string;
+		welcomeIssue: string;
+		requestMoreInfo: string;
+		moreInfoAdded: string;
 	};
 }
 
@@ -56,6 +64,8 @@ export const defaultConfig: BotConfig = {
 		removeClosedLabel: true,
 		requestMoreInfo: true,
 		addLabelsOnClose: true,
+		welcomeContributor: true,
+		welcomeIssue: true,
 	},
 	labels: {
 		wip: "WIP",
@@ -75,5 +85,22 @@ export const defaultConfig: BotConfig = {
 		red: "AA2626",
 		orange: "B60205",
 		gray: "383214",
+	},
+	messages: {
+		welcomeContributor:
+			`Thanks for your first pull request, @{user}! 🎉\n\n` +
+			`The team will review your changes soon. In the meantime, please make sure:\n` +
+			`- [ ] Tests pass\n` +
+			`- [ ] Documentation is updated (if needed)\n` +
+			`- [ ] Commit messages follow our guidelines\n\n` +
+			`Welcome to our community! 🚀`,
+		welcomeIssue:
+			`Thanks for opening your first issue, @{user}! 🎉\n\n` +
+			`We appreciate you taking the time to contribute to the project.\n` +
+			`Someone will respond to your issue soon. 👍`,
+		requestMoreInfo:
+			`Hey @{user}! We need more information to help you better. Please provide more details about what you're trying to accomplish here.\n\n` +
+			`Please edit your {type} to include more details.`,
+		moreInfoAdded: `@{user} Thanks for adding more information! I've removed the needs more info label.`,
 	},
 };

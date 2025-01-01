@@ -18,6 +18,8 @@ automations:
     removeClosedLabel: true
     requestMoreInfo: true
     addLabelsOnClose: true
+    welcomeContributor: true
+    welcomeIssue: true
 
 # Label settings
 labels:
@@ -31,3 +33,32 @@ colors:
     red: "AA2626"
     orange: "B60205"
     gray: "383214"
+
+# Configure welcome messages
+messages:
+    # Message for first-time PR contributors (use {user} for username)
+    welcomeContributor: |
+        Thanks for your first pull request, @{user}! 🎉
+
+        The team will review your changes soon. In the meantime, please make sure:
+        - [ ] Tests pass
+        - [ ] Documentation is updated (if needed)
+        - [ ] Commit messages follow our guidelines
+
+        Welcome to our community! 🚀
+
+    # Message for first-time issue creators (use {user} for username)
+    welcomeIssue: |
+        Thanks for opening your first issue, @{user}! 🎉
+
+        We appreciate you taking the time to contribute to the project.
+        Someone will respond to your issue soon. 👍
+
+    # Message when requesting more information (use {user} for username, {type} for issue/pull request)
+    requestMoreInfo: |
+        Hey @{user}! We need more information to help you better. Please provide more details about what you're trying to accomplish here.
+        Please edit your {type} to include more details.
+
+    # Message when user adds more information (use {user} for username)
+    moreInfoAdded: |
+        Thanks @{user} for adding more information! I've removed the needs more info label.
