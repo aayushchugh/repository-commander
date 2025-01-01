@@ -25,7 +25,13 @@ A GitHub bot that automates repository management through commands and automatic
 Use these commands in PR/issue comments:
 
 - `/approve` - Approve a pull request
-- `/merge` - Merge a pull request using rebase
+
+https://github.com/user-attachments/assets/d6797ffc-1f56-4363-a8cc-048f10f4a9b5
+
+- `/merge` - Merge a pull request
+
+https://github.com/user-attachments/assets/6a39d511-edd1-4a93-92fb-7a3cf486255d
+
 - `/close` - Close an issue or pull request
 - `/wip` - Mark as work in progress
 - `/label <name>` - Add labels
