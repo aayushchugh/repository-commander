@@ -1,8 +1,6 @@
 import type { Context } from "probot";
 import { createComment } from "../utils/comment.util";
-import { hasWriteAccess } from "../utils/permissions.util";
-import { addLabel, removeLabel } from "../utils/label.util";
-import { getConfig } from "../utils/config.util";
+import { hasWriteAccess, isAuthor } from "../utils/permissions.util";
 
 export async function handleApproveCommand(context: Context<"issue_comment.created">) {
 	if (!context.payload.issue.pull_request) {
@@ -16,6 +14,13 @@ export async function handleApproveCommand(context: Context<"issue_comment.creat
 			context,
 			"Sorry, only users with write access can approve pull requests.",
 		);
+		return;
+	}
+
+	const isPRAuthor = isAuthor(context);
+
+	if (isPRAuthor) {
+		await createComment(context, "You cannot approve your own pull request.");
 		return;
 	}
 
