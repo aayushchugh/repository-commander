@@ -21,7 +21,7 @@
 	"scripts": {
 		"build": "tsc",
 		"start": "probot run ./build/index.js",
-		"dev": "tsc && probot run ./build/index.js",
+		"dev": "nodemon --exec \"tsc && probot run ./build/index.js\" --watch src --ext ts",
 		"test": "jest"
 	},
 	"dependencies": {

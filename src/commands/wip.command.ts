@@ -1,8 +1,20 @@
 import type { Context } from "probot";
 import { addLabel, removeLabel, listLabelsOnIssue } from "../utils/label.util";
 import { Labels, Colors } from "../constants/enums";
+import { hasWriteAccess, isAuthor } from "../utils/permissions.util";
+import { createComment } from "../utils/comment.util";
 
 export async function handleWIPCommand(context: Context<"issue_comment.created">) {
+	const canModify = (await hasWriteAccess(context)) || isAuthor(context);
+
+	if (!canModify) {
+		await createComment(
+			context,
+			"Sorry, only the author or users with write access can mark this as work in progress.",
+		);
+		return;
+	}
+
 	const { title } = context.payload.issue;
 	const labelsFromIssues = await listLabelsOnIssue(context);
 
