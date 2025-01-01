@@ -25,3 +25,11 @@ export enum Colors {
 	ORANGE = "B60205",
 	GRAY = "383214",
 }
+
+export enum Commands {
+	WIP = "/wip",
+	APPROVE = "/approve",
+	CLOSE = "/close",
+	LABEL = "/label",
+	MERGE = "/merge",
+}

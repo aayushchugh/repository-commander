@@ -19,6 +19,7 @@ import {
 	addMergedLabel,
 	removeClosedLabel,
 } from "./automation/addLabelsOnPullRequest.automation";
+import { Commands } from "./constants/enums";
 
 const availableCommandsMessage = `Available commands are:- 
     - **/label** - Add labels to an issue or pull request.
@@ -50,19 +51,19 @@ export = (app: Probot) => {
 		}
 
 		switch (command) {
-			case "/wip":
+			case Commands.WIP:
 				await handleWIPCommand(context);
 				break;
-			case "/approve":
+			case Commands.APPROVE:
 				await handleApproveCommand(context);
 				break;
-			case "/close":
+			case Commands.CLOSE:
 				await handleCloseCommand(context);
 				break;
-			case "/label":
+			case Commands.LABEL:
 				await handleLabelCommand(context, args);
 				break;
-			case "/merge":
+			case Commands.MERGE:
 				await handleMergeCommand(context);
 				break;
 			// ... other commands

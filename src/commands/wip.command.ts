@@ -1,18 +1,19 @@
 import type { Context } from "probot";
 import { addLabel, removeLabel, listLabelsOnIssue } from "../utils/label.util";
+import { Labels, Colors } from "../constants/enums";
 
 export async function handleWIPCommand(context: Context<"issue_comment.created">) {
 	const { title } = context.payload.issue;
 	const labelsFromIssues = await listLabelsOnIssue(context);
 
-	const wipLabel = labelsFromIssues.data.find((label) => label.name === "WIP");
+	const wipLabel = labelsFromIssues.data.find((label) => label.name === Labels.WIP);
 	const foundReadyForReviewLabel = labelsFromIssues.data.find(
-		(label) => label.name === "Ready for Review",
+		(label) => label.name === Labels.READY_FOR_REVIEW,
 	);
 
 	if (wipLabel) {
 		if (!foundReadyForReviewLabel && context.payload.issue.pull_request) {
-			await addLabel(context, "Ready for Review");
+			await addLabel(context, Labels.READY_FOR_REVIEW);
 		}
 
 		if (
@@ -27,13 +28,13 @@ export async function handleWIPCommand(context: Context<"issue_comment.created">
 			});
 		}
 
-		await removeLabel(context, "WIP");
+		await removeLabel(context, Labels.WIP);
 	} else {
 		if (foundReadyForReviewLabel) {
-			await removeLabel(context, "Ready for Review");
+			await removeLabel(context, Labels.READY_FOR_REVIEW);
 		}
 
-		await addLabel(context, "WIP", "383214");
+		await addLabel(context, Labels.WIP, Colors.GRAY);
 
 		if (
 			!title.includes("WIP") &&
