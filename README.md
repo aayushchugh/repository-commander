@@ -56,9 +56,9 @@ Use these commands in PR/issue comments:
 
     Approves the pull request (requires write access)
 
-   https://github.com/user-attachments/assets/d6797ffc-1f56-4363-a8cc-048f10f4a9b5
+<img width="1404" alt="image" src="https://github.com/user-attachments/assets/c15be504-a2e9-496e-bf63-ddd4dcf759ad" />
 
-3. **Merge PR**
+2. **Merge PR**
 
     ```
     /merge
@@ -66,9 +66,20 @@ Use these commands in PR/issue comments:
 
     Merges the pull request using rebase strategy (requires write access)
 
-   https://github.com/user-attachments/assets/6a39d511-edd1-4a93-92fb-7a3cf486255d
+<img width="1417" alt="image" src="https://github.com/user-attachments/assets/85a37b6a-a13b-44aa-895d-43edeb02e95a" />
 
-5. **Add Labels**
+3. **Close**
+
+    ```
+    /close
+    ```
+
+    Closes a issue/PR
+
+   <img width="1404" alt="image" src="https://github.com/user-attachments/assets/8deba0de-9aff-48f4-883d-9b5419c89879" />
+
+
+4. **Add Labels**
 
     ```
     /label bug documentation
@@ -76,7 +87,10 @@ Use these commands in PR/issue comments:
 
     Adds one or more labels to the issue/PR
 
-6. **Work in Progress**
+<img width="1400" alt="image" src="https://github.com/user-attachments/assets/8bc0ee2a-caf7-4204-acc2-9f15f91efbd3" />
+
+
+5. **Work in Progress**
 
     ```
     /wip
@@ -84,43 +98,75 @@ Use these commands in PR/issue comments:
 
     Marks PR as work in progress
 
-7. **Request Information**
+<img width="1422" alt="image" src="https://github.com/user-attachments/assets/e4f1026c-3fb5-4763-9c93-875084a26574" />
+
+
+6. **Request Information**
     ```
     /request-info
     ```
     Requests additional information from the author
 
+<img width="1405" alt="image" src="https://github.com/user-attachments/assets/81e84593-9934-44ce-8e85-d3f1d404048a" />
+
+
 ### Automations
 
 The bot includes several automatic behaviors that can be enabled or disabled:
 
-1. **Ready for Review** (`addReadyForReview`)
+1. **Request more info** (`requestMoreInfo`)
+
+   - Request more information from user when description is too short
+   - Triggers on: Issue opened
+
+  <img width="1402" alt="image" src="https://github.com/user-attachments/assets/7c52d5d1-2d17-4cb7-a94d-1735a05612d4" />
+
+
+2. **Ready for Review** (`addReadyForReview`)
 
     - Adds "ready for review" label to new pull requests
     - Triggers on: Pull request opened
 
-2. **Approval Labels** (`addApprovedLabel`)
+<img width="950" alt="image" src="https://github.com/user-attachments/assets/257880d5-aa91-4b4b-876e-0c9ca5c27ffc" />
+
+  
+
+3. **Approval Labels** (`addApprovedLabel`)
 
     - Adds "approved" label when PR is approved
     - Removes "changes requested" label if present
     - Triggers on: Pull request review submitted
 
-3. **Changes Requested** (`addChangesRequestedLabel`)
+ <img width="1404" alt="image" src="https://github.com/user-attachments/assets/c15be504-a2e9-496e-bf63-ddd4dcf759ad" />
+
+
+4. **Changes Requested** (`addChangesRequestedLabel`)
 
     - Adds "changes requested" label when changes are requested
     - Removes "approved" and "ready for review" labels
     - Triggers on: Pull request review submitted
 
-4. **Merged Label** (`addMergedLabel`)
+<img width="1425" alt="image" src="https://github.com/user-attachments/assets/000ea27f-6353-4e44-b1fd-d7df42d64857" />
+
+
+5. **Merged Label** (`addMergedLabel`)
 
     - Adds "merged" label when PR is merged
     - Removes review-related labels
     - Triggers on: Pull request closed (merged)
 
-5. **Welcome Messages** (`welcomeContributor`, `welcomeIssue`)
+  
+ <img width="1403" alt="image" src="https://github.com/user-attachments/assets/94707a0e-b2a4-48ac-93d1-abaf6741ef44" />
+
+
+6. **Welcome Messages** (`welcomeContributor`, `welcomeIssue`)
     - Welcomes first-time contributors
     - Provides helpful onboarding information
     - Triggers on: First PR or issue
+
+<img width="930" alt="image" src="https://github.com/user-attachments/assets/e68f4114-d8f7-4dae-9ef1-055b954e84e5" />
+
+
 
 ## Configuration
 
