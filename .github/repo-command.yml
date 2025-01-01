@@ -33,6 +33,7 @@ colors:
     red: "AA2626"
     orange: "B60205"
     gray: "383214"
+    green: "28A745"
 
 # Configure welcome messages
 messages:

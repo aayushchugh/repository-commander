@@ -37,6 +37,7 @@ export interface BotConfig {
 		red: string;
 		orange: string;
 		gray: string;
+		green: string;
 	};
 	messages: {
 		welcomeContributor: string;
@@ -85,6 +86,7 @@ export const defaultConfig: BotConfig = {
 		red: "AA2626",
 		orange: "B60205",
 		gray: "383214",
+		green: "28A745",
 	},
 	messages: {
 		welcomeContributor:

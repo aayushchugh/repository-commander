@@ -1,6 +1,8 @@
 import type { Context } from "probot";
 import { createComment } from "../utils/comment.util";
 import { hasWriteAccess } from "../utils/permissions.util";
+import { addLabel, removeLabel } from "../utils/label.util";
+import { getConfig } from "../utils/config.util";
 
 export async function handleApproveCommand(context: Context<"issue_comment.created">) {
 	if (!context.payload.issue.pull_request) {
@@ -17,13 +19,16 @@ export async function handleApproveCommand(context: Context<"issue_comment.creat
 		return;
 	}
 
-	await createComment(
-		context,
-		`Approving changes of this pull request as requested by @${context.payload.comment.user.login}`,
-	);
+	const config = await getConfig(context);
+
+	await createComment(context, `Pull request approved by @${context.payload.comment.user.login}`);
 
 	await context.octokit.pulls.createReview({
 		...context.pullRequest(),
 		event: "APPROVE",
 	});
+
+	// Add approved label and remove changes requested label if present
+	await addLabel(context, config.labels.approved, config.colors.green);
+	await removeLabel(context, config.labels.changesRequested);
 }
