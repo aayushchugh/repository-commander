@@ -285,3 +285,43 @@ If you have any feedback, please create a issue or reach out to me at `hey@ayush
 ## Support
 
 For support, please create a issue or reach out to me at `hey@ayushchugh.com`
+
+## Docker Support
+
+You can run the bot using Docker:
+
+### Using Docker Compose
+
+1. Create a `.env` file with your GitHub App credentials:
+
+```env
+APP_ID=your_app_id
+PRIVATE_KEY=your_private_key
+WEBHOOK_SECRET=your_webhook_secret
+```
+
+2. Start the bot:
+
+```bash
+# Production
+docker compose up -d
+
+# Development with hot reload
+docker compose up dev
+```
+
+### Using Docker directly
+
+```bash
+# Build the image
+docker build -t repository-commander .
+
+# Run the container
+docker run -d \
+  -p 3000:3000 \
+  --env-file .env \
+  --name repository-commander \
+  repository-commander
+```
+
+The bot will be available at `http://localhost:3000`.

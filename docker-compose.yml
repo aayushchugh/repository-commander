@@ -1,0 +1,19 @@
+version: "3.8"
+
+services:
+    repository_commander_server:
+        build: .
+        container_name: repository-commander
+        restart: unless-stopped
+        environment:
+            - NODE_ENV=production
+            - APP_ID=${APP_ID}
+            - PRIVATE_KEY=${PRIVATE_KEY}
+            - WEBHOOK_SECRET=${WEBHOOK_SECRET}
+            - LOG_LEVEL=info
+        ports:
+            - "3005:3000"
+        volumes:
+            - ./.env:/app/.env:ro
+            # Mount config file if you want to modify it without rebuilding
+            - ./config:/app/config:ro

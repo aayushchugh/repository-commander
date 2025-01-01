@@ -1,0 +1,25 @@
+# Use Node.js LTS version
+FROM node:20-slim
+
+# Create app directory
+WORKDIR /app
+
+# Install development dependencies
+COPY package*.json ./
+RUN npm install
+
+# Install nodemon globally for development
+RUN npm install -g nodemon
+
+# Copy app source
+COPY . .
+
+# Expose port
+EXPOSE 3000
+
+# Set environment variables
+ENV NODE_ENV=development
+ENV LOG_LEVEL=debug
+
+# Start the bot in development mode
+CMD ["npm", "run", "dev"] 
